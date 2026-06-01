@@ -77,16 +77,16 @@ export default function HomeView() {
               <button
                 key={p.name}
                 onClick={() => setHistoryPerson({ name: p.name })}
-                className="bg-white rounded-2xl p-4 text-left active:scale-95 transition-transform"
+                className="bg-red-50 rounded-2xl p-4 text-left active:scale-95 transition-transform border border-red-100"
               >
                 <div className="mb-3">
                   <Avatar name={p.name} size="sm" />
                 </div>
                 <p className="font-semibold text-gray-900 text-sm truncate mb-0.5">{p.name}</p>
-                <p className="text-[11px] text-gray-400 mb-3">{dayjs(p.latestDate).format('D MMM YYYY')}</p>
+                <p className="text-[11px] text-red-300 mb-3">{dayjs(p.latestDate).format('D MMM YYYY')}</p>
                 <div className="flex flex-col gap-0.5">
                   {Object.entries(p.totals).map(([cur, amt]) => (
-                    <p key={cur} className="text-sm font-semibold text-gray-800">
+                    <p key={cur} className="text-sm font-semibold text-red-500">
                       -{cur}{amt.toLocaleString()}
                     </p>
                   ))}

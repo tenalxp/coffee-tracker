@@ -78,7 +78,7 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
             {Object.entries(totalPending).map(([cur, amt]) => (
               <div key={cur} className="bg-red-50 rounded-xl px-3 py-2">
                 <p className="text-[10px] text-red-400 font-medium">Pending</p>
-                <p className="text-sm font-bold text-red-500">-{amt.toLocaleString()} {cur}</p>
+                <p className="text-sm font-bold text-red-500">-{cur}{amt.toLocaleString()}</p>
               </div>
             ))}
           </div>
@@ -111,6 +111,7 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
                   <p className="text-sm font-bold text-gray-900">
                     {entry.currency || '฿'}{entry.price.toLocaleString()}
                   </p>
+
                   <select
                     value={entry.status}
                     onChange={e => updateStatus(entry.id, e.target.value)}

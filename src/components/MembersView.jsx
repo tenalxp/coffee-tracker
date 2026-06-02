@@ -56,13 +56,13 @@ export default function MembersView() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-gray-800">สมาชิก</h2>
-          <p className="text-sm text-gray-400">{people.length} คน</p>
+          <h2 className="text-lg font-bold text-gray-800">Members</h2>
+          <p className="text-sm text-gray-400">{people.length} people</p>
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-400">กำลังโหลด...</div>
+        <div className="text-center py-12 text-gray-400">Loading...</div>
       ) : (
         <div className="grid grid-cols-4 gap-6 sm:grid-cols-5 md:grid-cols-6">
 
@@ -75,8 +75,8 @@ export default function MembersView() {
               <Plus size={24} />
             </button>
             <div className="text-center">
-              <div className="text-xs font-medium text-gray-600">เพิ่ม</div>
-              <div className="text-xs text-gray-400">สมาชิก</div>
+              <div className="text-xs font-medium text-gray-600">Add</div>
+              <div className="text-xs text-gray-400">Member</div>
             </div>
           </div>
 
@@ -107,7 +107,7 @@ export default function MembersView() {
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-gray-800">เพิ่มสมาชิกใหม่</h3>
+              <h3 className="font-bold text-gray-800">Add New Member</h3>
               <button onClick={() => { setShowAdd(false); setNewName('') }} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
@@ -121,7 +121,7 @@ export default function MembersView() {
               <input
                 autoFocus
                 type="text"
-                placeholder="ชื่อสมาชิก"
+                placeholder="Member name"
                 value={newName}
                 onChange={e => setNewName(e.target.value)}
                 className="border rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-400"
@@ -131,7 +131,7 @@ export default function MembersView() {
                 disabled={saving || !newName.trim()}
                 className="bg-gray-900 hover:bg-gray-700 text-white rounded-xl py-2.5 font-medium transition-colors disabled:opacity-40"
               >
-                {saving ? 'กำลังบันทึก...' : 'เพิ่มสมาชิก'}
+                {saving ? 'Saving...' : 'Add Member'}
               </button>
             </form>
           </div>
@@ -150,20 +150,20 @@ export default function MembersView() {
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm text-center">
             <Avatar name={confirmDelete.name} />
-            <h3 className="font-bold text-gray-800 mt-3">ลบ "{confirmDelete.name}"?</h3>
-            <p className="text-sm text-gray-400 mt-1">ข้อมูลรายการกาแฟของคนนี้จะยังอยู่</p>
+            <h3 className="font-bold text-gray-800 mt-3">Remove "{confirmDelete.name}"?</h3>
+            <p className="text-sm text-gray-400 mt-1">Their payment records will remain.</p>
             <div className="flex gap-3 mt-5">
               <button
                 onClick={() => setConfirmDelete(null)}
                 className="flex-1 border rounded-xl py-2.5 text-gray-600 hover:bg-gray-50 transition-colors"
               >
-                ยกเลิก
+                Cancel
               </button>
               <button
                 onClick={async () => { await deletePerson(confirmDelete.id); setConfirmDelete(null) }}
                 className="flex-1 bg-red-400 hover:bg-red-500 text-white rounded-xl py-2.5 font-medium transition-colors"
               >
-                ลบ
+                Remove
               </button>
             </div>
           </div>

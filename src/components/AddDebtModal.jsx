@@ -63,7 +63,7 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
           <Avatar name={person.name} size="sm" />
           <div>
             <div className="font-bold text-gray-800">{person.name}</div>
-            <div className="text-xs text-gray-400">เพิ่มรายการค้างจ่าย</div>
+            <div className="text-xs text-gray-400">Add payment record</div>
           </div>
           <button onClick={onClose} className="ml-auto text-gray-400 hover:text-gray-600">
             <X size={20} />
@@ -73,7 +73,7 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
         <form onSubmit={handleSubmit} className="p-5 flex flex-col gap-4">
           {/* Item type */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">ค้างจ่าย *</label>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Item *</label>
             {!addingItem ? (
               <select
                 value={form.item}
@@ -81,18 +81,18 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
                 required
                 className="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
               >
-                <option value="">เลือกประเภท</option>
+                <option value="">Select item</option>
                 {items.map(it => (
                   <option key={it.id} value={it.name}>{it.name}</option>
                 ))}
-                <option value="__new__">➕ เพิ่มประเภทใหม่...</option>
+                <option value="__new__">➕ Add new item...</option>
               </select>
             ) : (
               <div className="flex gap-2">
                 <input
                   autoFocus
                   type="text"
-                  placeholder="ชื่อประเภทใหม่"
+                  placeholder="New item name"
                   value={newItemName}
                   onChange={e => setNewItemName(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), confirmNewItem())}
@@ -110,7 +110,7 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
 
           {/* Date */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">วันที่ *</label>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Date *</label>
             <input
               type="date"
               value={form.date}
@@ -122,7 +122,7 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
 
           {/* Amount + Currency */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">จำนวนเงิน *</label>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Amount *</label>
             <div className="flex gap-2">
               <div className="flex border rounded-xl overflow-hidden">
                 {CURRENCIES.map(c => (
@@ -155,10 +155,10 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
 
           {/* Description */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">หมายเหตุ</label>
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Note</label>
             <input
               type="text"
-              placeholder="รายละเอียดเพิ่มเติม (ไม่บังคับ)"
+              placeholder="Optional note"
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               className="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
@@ -170,7 +170,7 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
             disabled={saving || !form.item || !form.amount || addingItem}
             className="bg-gray-900 hover:bg-gray-700 text-white rounded-xl py-3 font-semibold transition-colors disabled:opacity-30 mt-1"
           >
-            {saving ? 'กำลังบันทึก...' : 'บันทึกรายการ'}
+            {saving ? 'Saving...' : 'Save'}
           </button>
         </form>
       </div>

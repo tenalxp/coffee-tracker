@@ -23,22 +23,22 @@ export default function ItemsView() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-gray-800">ประเภทรายการ</h2>
-          <p className="text-sm text-gray-400">{items.length} รายการ</p>
+          <h2 className="text-lg font-bold text-gray-800">Item Types</h2>
+          <p className="text-sm text-gray-400">{items.length} items</p>
         </div>
         <button
           onClick={() => setShowAdd(true)}
           className="flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors"
         >
           <Plus size={16} />
-          เพิ่มประเภท
+          Add Item
         </button>
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-400">กำลังโหลด...</div>
+        <div className="text-center py-12 text-gray-400">Loading...</div>
       ) : items.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">ยังไม่มีประเภทรายการ</div>
+        <div className="text-center py-12 text-gray-400">No item types yet</div>
       ) : (
         <div className="flex flex-col gap-2">
           {items.map(item => (
@@ -62,7 +62,7 @@ export default function ItemsView() {
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-gray-800">เพิ่มประเภทใหม่</h3>
+              <h3 className="font-bold text-gray-800">Add New Item Type</h3>
               <button onClick={() => { setShowAdd(false); setNewName('') }} className="text-gray-400 hover:text-gray-600">
                 <X size={20} />
               </button>
@@ -71,7 +71,7 @@ export default function ItemsView() {
               <input
                 autoFocus
                 type="text"
-                placeholder="เช่น ค่าอาหาร, ค่าน้ำมัน"
+                placeholder="e.g. Food, Transport"
                 value={newName}
                 onChange={e => setNewName(e.target.value)}
                 className="border rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-400"
@@ -81,7 +81,7 @@ export default function ItemsView() {
                 disabled={saving || !newName.trim()}
                 className="bg-gray-900 hover:bg-gray-700 text-white rounded-xl py-2.5 font-medium transition-colors disabled:opacity-40"
               >
-                {saving ? 'กำลังบันทึก...' : 'เพิ่ม'}
+                {saving ? 'Saving...' : 'Add'}
               </button>
             </form>
           </div>
@@ -94,19 +94,19 @@ export default function ItemsView() {
             <div className="bg-red-100 text-red-500 rounded-full w-14 h-14 flex items-center justify-center mx-auto mb-3">
               <Tag size={24} />
             </div>
-            <h3 className="font-bold text-gray-800">ลบ "{confirmDelete.name}"?</h3>
+            <h3 className="font-bold text-gray-800">Remove "{confirmDelete.name}"?</h3>
             <div className="flex gap-3 mt-5">
               <button
                 onClick={() => setConfirmDelete(null)}
                 className="flex-1 border rounded-xl py-2.5 text-gray-600 hover:bg-gray-50 transition-colors"
               >
-                ยกเลิก
+                Cancel
               </button>
               <button
                 onClick={async () => { await deleteItem(confirmDelete.id); setConfirmDelete(null) }}
                 className="flex-1 bg-red-400 hover:bg-red-500 text-white rounded-xl py-2.5 font-medium transition-colors"
               >
-                ลบ
+                Remove
               </button>
             </div>
           </div>

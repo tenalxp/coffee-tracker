@@ -21,7 +21,7 @@ export default function AddMemberModal({ onClose }) {
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-gray-800">เพิ่มสมาชิกใหม่</h3>
+          <h3 className="font-bold text-gray-800">Add New Member</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <X size={20} />
           </button>
@@ -35,7 +35,7 @@ export default function AddMemberModal({ onClose }) {
           <input
             autoFocus
             type="text"
-            placeholder="ชื่อสมาชิก"
+            placeholder="Member name"
             value={name}
             onChange={e => setName(e.target.value)}
             className="border rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-400"
@@ -45,7 +45,7 @@ export default function AddMemberModal({ onClose }) {
             disabled={saving || !name.trim()}
             className="bg-gray-900 hover:bg-gray-700 text-white rounded-xl py-2.5 font-medium transition-colors disabled:opacity-40"
           >
-            {saving ? 'กำลังบันทึก...' : 'เพิ่มสมาชิก'}
+            {saving ? 'Saving...' : 'Add Member'}
           </button>
         </form>
       </div>

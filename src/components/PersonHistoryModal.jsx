@@ -53,7 +53,7 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
             <Avatar name={person.name} size="sm" />
             <div>
               <p className="font-semibold text-gray-900">{person.name}</p>
-              <p className="text-xs text-gray-400">{entries.length} รายการ</p>
+              <p className="text-xs text-gray-400">{entries.length} records</p>
             </div>
           </div>
           <div className="flex items-center gap-2">

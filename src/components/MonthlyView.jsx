@@ -42,9 +42,9 @@ export default function MonthlyView() {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-gray-400">กำลังโหลด...</div>
+        <div className="text-center py-8 text-gray-400">Loading...</div>
       ) : entries.length === 0 ? (
-        <div className="text-center py-8 text-gray-400">ไม่มีข้อมูลเดือนนี้</div>
+        <div className="text-center py-8 text-gray-400">No records this month</div>
       ) : (
         Object.entries(byPerson).map(([name, items]) => {
           const total = items.reduce((s, e) => s + e.price, 0)
@@ -52,10 +52,10 @@ export default function MonthlyView() {
           return (
             <div key={name} className="bg-white rounded-2xl shadow-sm overflow-hidden">
               {/* Person header */}
-              <div className="bg-gradient-to-r from-amber-400 to-orange-400 px-4 py-3 flex items-center justify-between text-white">
+              <div className="bg-gray-900 px-4 py-3 flex items-center justify-between text-white">
                 <div className="font-bold text-lg">{name}</div>
                 <div className="text-right">
-                  <div className="text-xs opacity-80">ค้างจ่าย</div>
+                  <div className="text-xs opacity-60">Pending</div>
                   <div className="font-bold">฿{pending.toFixed(0)}</div>
                 </div>
               </div>
@@ -83,8 +83,8 @@ export default function MonthlyView() {
 
               {/* Person footer */}
               <div className="bg-gray-50 px-4 py-2 flex justify-between text-sm text-gray-500">
-                <span>{items.length} รายการ</span>
-                <span>รวม ฿{total.toFixed(0)}</span>
+                <span>{items.length} records</span>
+                <span>Total ฿{total.toFixed(0)}</span>
               </div>
             </div>
           )

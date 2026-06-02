@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { Plus, ChevronRight } from 'lucide-react'
+import mascot from '../assets/mascot.png'
 import { usePeople } from '../hooks/usePeople'
 import { usePendingByPerson } from '../hooks/useCoffeeEntries'
 import { Avatar } from './MembersView'
@@ -23,15 +24,15 @@ export default function HomeView() {
     <div className="bg-[#F2F2F7] min-h-screen">
 
 
-      {/* Quick add — members */}
+      {/* Members row */}
       <div className="bg-white mt-3 px-5 py-5">
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-sm font-semibold text-gray-900">Quick Add</p>
-          <button className="text-xs text-gray-400 flex items-center gap-0.5 hover:text-gray-600">
-            See all <ChevronRight size={12} />
-          </button>
-        </div>
         <div className="flex items-start gap-5 overflow-x-auto pb-1 scrollbar-none">
+          {/* Mascot */}
+          <div className="flex flex-col items-center gap-2 shrink-0">
+            <img src={mascot} alt="mascot" className="w-20 h-20 object-contain" />
+          </div>
+          <div className="w-px self-stretch bg-gray-100 shrink-0 my-1" />
+          {/* Add button */}
           <div className="flex flex-col items-center gap-2 shrink-0">
             <button
               onClick={() => setShowAddMember(true)}
@@ -67,9 +68,10 @@ export default function HomeView() {
         {loading ? (
           <div className="text-center py-10 text-gray-300 text-sm">Loading...</div>
         ) : pendingPeople.length === 0 ? (
-          <div className="bg-white rounded-2xl text-center py-10">
-            <p className="text-2xl mb-2">✓</p>
-            <p className="text-sm text-gray-400">All cleared</p>
+          <div className="bg-white rounded-2xl text-center py-8 px-4">
+            <img src={mascot} alt="All cleared" className="w-32 h-32 mx-auto object-contain" />
+            <p className="text-sm font-semibold text-gray-700 mt-2">All cleared!</p>
+            <p className="text-xs text-gray-400 mt-1">No pending payments</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">

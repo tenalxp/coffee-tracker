@@ -166,9 +166,8 @@ export default function HistoryView() {
           </div>
         </div>
 
-        {/* Item + Status + Currency filters */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
-          {/* Item dropdown */}
+        {/* Item + Status filters */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-none">
           <select
             value={selectedItem}
             onChange={e => setSelectedItem(e.target.value)}
@@ -179,8 +178,6 @@ export default function HistoryView() {
             <option value="">All items</option>
             {items.map(it => <option key={it.id} value={it.name}>{it.name}</option>)}
           </select>
-
-          {/* Status pills */}
           {STATUS_FILTERS.map(f => (
             <button
               key={f.key}
@@ -192,11 +189,10 @@ export default function HistoryView() {
               {f.label}
             </button>
           ))}
+        </div>
 
-          {/* Divider */}
-          <div className="w-px bg-gray-200 shrink-0 my-1" />
-
-          {/* Currency pills */}
+        {/* Currency pills */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-none">
           {[{ key: '', label: 'All ฿₭$' }, { key: '฿', label: '฿ THB' }, { key: '₭', label: '₭ KIP' }, { key: '$', label: '$ USD' }].map(c => (
             <button
               key={c.key}

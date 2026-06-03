@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, Clock } from 'lucide-react'
 import { usePeople } from '../hooks/usePeople'
 import AddMemberModal from './AddMemberModal'
 import EditMemberModal from './EditMemberModal'
+import PersonHistoryModal from './PersonHistoryModal'
 import { PixelAvatarIcon } from './PixelAvatar'
 
 const COLORS = [
@@ -54,6 +55,7 @@ export default function MembersView() {
   const [showAdd, setShowAdd] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [selectedPerson, setSelectedPerson] = useState(null)
+  const [historyPerson, setHistoryPerson] = useState(null)
 
   return (
     <div className="flex flex-col gap-6">
@@ -90,11 +92,19 @@ export default function MembersView() {
                 <button onClick={() => setSelectedPerson(person)} className="focus:outline-none">
                   <Avatar name={person.name} icon={person.icon} />
                 </button>
+                {/* Delete button */}
                 <button
                   onClick={() => setConfirmDelete(person)}
                   className="absolute -top-1 -right-1 w-5 h-5 bg-red-400 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow"
                 >
                   <X size={10} />
+                </button>
+                {/* History button */}
+                <button
+                  onClick={() => setHistoryPerson(person)}
+                  className="absolute -bottom-1 -right-1 w-5 h-5 bg-gray-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow"
+                >
+                  <Clock size={10} />
                 </button>
               </div>
               <div className="text-center">
@@ -115,6 +125,13 @@ export default function MembersView() {
             await updatePerson(id, name, icon)
             setSelectedPerson(null)
           }}
+        />
+      )}
+
+      {historyPerson && (
+        <PersonHistoryModal
+          person={historyPerson}
+          onClose={() => setHistoryPerson(null)}
         />
       )}
 

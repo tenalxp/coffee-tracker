@@ -37,10 +37,6 @@ export default function HomeView() {
             <p className="text-xs font-medium mb-0.5" style={{ color: '#8A9BAA' }}>
               {dayjs().format('ddd, D MMM YYYY')}
             </p>
-            <p className="text-xs mb-2" style={{ color: '#8A9BAA' }}>Pending payments</p>
-            <p className="text-5xl font-bold tracking-tight" style={{ color: '#2D3A48' }}>
-              {pendingPeople.length}
-            </p>
           </div>
         </div>
       </div>

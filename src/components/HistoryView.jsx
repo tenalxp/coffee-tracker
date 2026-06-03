@@ -144,8 +144,8 @@ export default function HistoryView() {
           )}
         </div>
 
-        {/* Date range */}
-        <div className="flex gap-2">
+        {/* Date range + Item */}
+        <div className="flex gap-2 items-end">
           <div className="flex-1">
             <p className="text-[10px] text-gray-400 mb-1 px-1">From</p>
             <input
@@ -164,20 +164,20 @@ export default function HistoryView() {
               className="w-full bg-gray-100 rounded-xl px-3 py-2 text-xs text-gray-700 outline-none"
             />
           </div>
-        </div>
-
-        {/* Item + Status filters */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-none">
           <select
             value={selectedItem}
             onChange={e => setSelectedItem(e.target.value)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border-0 outline-none shrink-0 ${
+            className={`px-3 py-2 rounded-xl text-xs font-medium border-0 outline-none shrink-0 ${
               selectedItem ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
             }`}
           >
             <option value="">All items</option>
             {items.map(it => <option key={it.id} value={it.name}>{it.name}</option>)}
           </select>
+        </div>
+
+        {/* Status filters */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-none">
           {STATUS_FILTERS.map(f => (
             <button
               key={f.key}

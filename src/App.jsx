@@ -18,27 +18,29 @@ export default function App() {
   const [tab, setTab] = useState('home')
 
   return (
-    <div className="min-h-screen bg-[#F2F2F7] flex flex-col max-w-md mx-auto">
+    <div className="min-h-screen flex flex-col max-w-md mx-auto" style={{ background: '#EEF0F5' }}>
       <div className="flex-1 overflow-y-auto pb-20">
         {tab === 'home'    && <HomeView />}
-        {tab === 'monthly' && <div className="px-5 pt-14"><h2 className="text-xl font-semibold text-gray-900 mb-5">Monthly</h2><MonthlyView /></div>}
+        {tab === 'monthly' && <div className="px-5 pt-14 min-h-screen" style={{ background: '#EEF0F5' }}><h2 className="text-xl font-bold mb-5" style={{ color: '#3D2B3D' }}>Monthly</h2><MonthlyView /></div>}
         {tab === 'history' && <HistoryView />}
-        {tab === 'members' && <div className="px-5 pt-14"><MembersView /></div>}
-        {tab === 'items'   && <div className="px-5 pt-14"><ItemsView /></div>}
+        {tab === 'members' && <div className="px-5 pt-14 min-h-screen" style={{ background: '#EEF0F5' }}><MembersView /></div>}
+        {tab === 'items'   && <div className="px-5 pt-14 min-h-screen" style={{ background: '#EEF0F5' }}><ItemsView /></div>}
       </div>
 
       {/* Bottom nav */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/80 backdrop-blur border-t border-gray-200/60 flex z-40">
+      <div
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md flex z-40"
+        style={{ background: 'rgba(238,240,245,0.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.7)' }}
+      >
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`flex-1 flex flex-col items-center gap-1 py-3 transition-colors ${
-              tab === key ? 'text-gray-900' : 'text-gray-400'
-            }`}
+            className="flex-1 flex flex-col items-center gap-1 py-3 transition-all"
+            style={{ color: tab === key ? '#6A9BAA' : '#8A9BAA' }}
           >
             <Icon size={19} strokeWidth={tab === key ? 2.2 : 1.6} />
-            <span className={`text-[10px] ${tab === key ? 'font-semibold' : 'font-normal'}`}>{label}</span>
+            <span className={`text-[10px] ${tab === key ? 'font-bold' : 'font-normal'}`}>{label}</span>
           </button>
         ))}
       </div>

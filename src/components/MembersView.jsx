@@ -50,7 +50,7 @@ function Avatar({ name, icon, size = 'lg' }) {
 export { Avatar, getColor, getInitials }
 
 export default function MembersView() {
-  const { people, loading, deletePerson } = usePeople()
+  const { people, loading, deletePerson, updatePerson } = usePeople()
   const [showAdd, setShowAdd] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [selectedPerson, setSelectedPerson] = useState(null)
@@ -111,6 +111,10 @@ export default function MembersView() {
         <EditMemberModal
           person={selectedPerson}
           onClose={() => setSelectedPerson(null)}
+          onUpdate={async (id, name, icon) => {
+            await updatePerson(id, name, icon)
+            setSelectedPerson(null)
+          }}
         />
       )}
 

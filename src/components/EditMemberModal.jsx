@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
-import { usePeople } from '../hooks/usePeople'
 import { AVATARS, PixelAvatarIcon } from './PixelAvatar'
 
-export default function EditMemberModal({ person, onClose }) {
-  const { updatePerson } = usePeople()
+export default function EditMemberModal({ person, onClose, onUpdate }) {
   const [name, setName] = useState(person.name)
   const [avatarId, setAvatarId] = useState(person.icon || 'ghost')
   const [saving, setSaving] = useState(false)
@@ -13,9 +11,8 @@ export default function EditMemberModal({ person, onClose }) {
     e.preventDefault()
     if (!name.trim()) return
     setSaving(true)
-    await updatePerson(person.id, name, avatarId)
+    await onUpdate(person.id, name, avatarId)
     setSaving(false)
-    onClose()
   }
 
   return (

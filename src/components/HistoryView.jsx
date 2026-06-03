@@ -34,6 +34,7 @@ export default function HistoryView() {
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
   const [showMemberDrop, setShowMemberDrop] = useState(false)
+  const [selectedCurrency, setSelectedCurrency] = useState('')
 
   useEffect(() => {
     const fetch = async () => {
@@ -70,13 +71,15 @@ export default function HistoryView() {
 
   const clearAll = () => {
     setStatus('all'); setSelectedMember(''); setSelectedItem('')
-    setDateFrom(''); setDateTo(''); setMemberSearch('')
+    setDateFrom(''); setDateTo(''); setMemberSearch(''); setSelectedCurrency('')
   }
 
-  const hasFilters = status !== 'all' || selectedMember || selectedItem || dateFrom || dateTo
+  const hasFilters = status !== 'all' || selectedMember || selectedItem || dateFrom || dateTo || selectedCurrency
+
+  const filteredEntries = selectedCurrency ? entries.filter(e => (e.currency || '฿') === selectedCurrency) : entries
 
   // summary totals
-  const summary = entries.reduce((acc, e) => {
+  const summary = filteredEntries.reduce((acc, e) => {
     const cur = e.currency || '฿'
     if (!acc[cur]) acc[cur] = { total: 0, pending: 0, paid: 0 }
     acc[cur].total += e.price
@@ -85,7 +88,7 @@ export default function HistoryView() {
     return acc
   }, {})
 
-  const grouped = entries.reduce((acc, e) => {
+  const grouped = filteredEntries.reduce((acc, e) => {
     if (!acc[e.date]) acc[e.date] = []
     acc[e.date].push(e)
     return acc
@@ -163,7 +166,7 @@ export default function HistoryView() {
           </div>
         </div>
 
-        {/* Item + Status filters */}
+        {/* Item + Status + Currency filters */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
           {/* Item dropdown */}
           <select
@@ -189,15 +192,31 @@ export default function HistoryView() {
               {f.label}
             </button>
           ))}
+
+          {/* Divider */}
+          <div className="w-px bg-gray-200 shrink-0 my-1" />
+
+          {/* Currency pills */}
+          {[{ key: '', label: 'All ฿₭$' }, { key: '฿', label: '฿ THB' }, { key: '₭', label: '₭ KIP' }, { key: '$', label: '$ USD' }].map(c => (
+            <button
+              key={c.key}
+              onClick={() => setSelectedCurrency(c.key)}
+              className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${
+                selectedCurrency === c.key ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
+              }`}
+            >
+              {c.label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Summary bar */}
-      {entries.length > 0 && (
+      {filteredEntries.length > 0 && (
         <div className="mx-5 mt-4 rounded-2xl overflow-hidden"
           style={{ background: 'rgba(255,255,255,0.85)', boxShadow: '0 4px 16px rgba(100,120,140,0.1)', border: '1px solid rgba(255,255,255,0.9)' }}>
           <div className="px-4 py-2 border-b border-gray-50 flex items-center justify-between">
-            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">ยอดรวม · {entries.length} รายการ</p>
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">ยอดรวม · {filteredEntries.length} รายการ</p>
           </div>
           <div className="divide-y divide-gray-50">
             {Object.entries(summary).map(([cur, s]) => (

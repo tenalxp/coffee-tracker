@@ -17,11 +17,10 @@ export default function HomeView() {
   const [showAddMember, setShowAddMember] = useState(false)
 
   return (
-    <div className="min-h-screen" style={{ background: '#EEF0F5' }}>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(160deg, #E8EEF5 0%, #EDF3F0 100%)' }}>
 
       {/* Hero header */}
-      <div className="relative overflow-hidden px-5 pt-12 pb-8"
-        style={{ background: 'linear-gradient(160deg, #E8EEF5 0%, #EDF3F0 100%)' }}>
+      <div className="relative overflow-hidden px-5 pt-12 pb-8">
 
         {/* Blob decorations */}
         <div className="absolute -top-8 -right-8 w-44 h-44 rounded-full blur-2xl opacity-60"

@@ -78,7 +78,7 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
   const hasFilters = statusFilter !== 'all' || itemFilter || dateFrom || dateTo
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F2F2F7] flex flex-col max-w-md mx-auto">
+    <div className="fixed inset-0 z-50 flex flex-col max-w-md mx-auto" style={{ background: 'linear-gradient(160deg, #E8EEF5 0%, #EDF3F0 100%)' }}>
       {/* Header */}
       <div className="bg-white px-5 pt-14 pb-4 shrink-0 flex flex-col gap-3">
         <div className="flex items-center justify-between">

@@ -99,7 +99,7 @@ export default function HistoryView() {
   )
 
   return (
-    <div className="bg-[#F2F2F7] min-h-screen">
+    <div className="min-h-screen">
       <div className="bg-white px-5 pt-14 pb-4 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">History</h2>

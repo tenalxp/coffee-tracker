@@ -75,6 +75,16 @@ export default function HistoryView() {
 
   const hasFilters = status !== 'all' || selectedMember || selectedItem || dateFrom || dateTo
 
+  // summary totals
+  const summary = entries.reduce((acc, e) => {
+    const cur = e.currency || '฿'
+    if (!acc[cur]) acc[cur] = { total: 0, pending: 0, paid: 0 }
+    acc[cur].total += e.price
+    if (e.status === 'pending') acc[cur].pending += e.price
+    else acc[cur].paid += e.price
+    return acc
+  }, {})
+
   const grouped = entries.reduce((acc, e) => {
     if (!acc[e.date]) acc[e.date] = []
     acc[e.date].push(e)
@@ -181,6 +191,37 @@ export default function HistoryView() {
           ))}
         </div>
       </div>
+
+      {/* Summary bar */}
+      {entries.length > 0 && (
+        <div className="mx-5 mt-4 rounded-2xl overflow-hidden"
+          style={{ background: 'rgba(255,255,255,0.85)', boxShadow: '0 4px 16px rgba(100,120,140,0.1)', border: '1px solid rgba(255,255,255,0.9)' }}>
+          <div className="px-4 py-2 border-b border-gray-50 flex items-center justify-between">
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">ยอดรวม · {entries.length} รายการ</p>
+          </div>
+          <div className="divide-y divide-gray-50">
+            {Object.entries(summary).map(([cur, s]) => (
+              <div key={cur} className="px-4 py-3 flex items-center justify-between gap-3">
+                <p className="text-base font-bold text-gray-800">{cur}{s.total.toLocaleString()}</p>
+                <div className="flex gap-3 text-right">
+                  {s.pending > 0 && (
+                    <div>
+                      <p className="text-[10px] text-red-400 font-medium">Pending</p>
+                      <p className="text-sm font-bold text-red-500">-{cur}{s.pending.toLocaleString()}</p>
+                    </div>
+                  )}
+                  {s.paid > 0 && (
+                    <div>
+                      <p className="text-[10px] text-emerald-500 font-medium">Paid</p>
+                      <p className="text-sm font-bold text-emerald-600">{cur}{s.paid.toLocaleString()}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="px-5 py-4 flex flex-col gap-5">
         {loading ? (

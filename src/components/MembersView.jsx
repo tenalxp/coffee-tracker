@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import { usePeople } from '../hooks/usePeople'
 import AddDebtModal from './AddDebtModal'
+import AddMemberModal from './AddMemberModal'
 import { PixelAvatarIcon } from './PixelAvatar'
 
 const COLORS = [
@@ -49,24 +50,10 @@ function Avatar({ name, icon, size = 'lg' }) {
 export { Avatar, getColor, getInitials }
 
 export default function MembersView() {
-  const { people, loading, addPerson, deletePerson } = usePeople()
+  const { people, loading, deletePerson } = usePeople()
   const [showAdd, setShowAdd] = useState(false)
-  const [newName, setNewName] = useState('')
-  const [saving, setSaving] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [selectedPerson, setSelectedPerson] = useState(null)
-
-  const handleAdd = async (e) => {
-    e.preventDefault()
-    if (!newName.trim()) return
-    setSaving(true)
-    const error = await addPerson(newName)
-    setSaving(false)
-    if (!error) {
-      setNewName('')
-      setShowAdd(false)
-    }
-  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -101,7 +88,7 @@ export default function MembersView() {
             <div key={person.id} className="flex flex-col items-center gap-2 group relative">
               <div className="relative">
                 <button onClick={() => setSelectedPerson(person)} className="focus:outline-none">
-                  <Avatar name={person.name} />
+                  <Avatar name={person.name} icon={person.icon} />
                 </button>
                 <button
                   onClick={() => setConfirmDelete(person)}
@@ -118,41 +105,7 @@ export default function MembersView() {
         </div>
       )}
 
-      {/* Add modal */}
-      {showAdd && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-gray-800">Add New Member</h3>
-              <button onClick={() => { setShowAdd(false); setNewName('') }} className="text-gray-400 hover:text-gray-600">
-                <X size={20} />
-              </button>
-            </div>
-            <form onSubmit={handleAdd} className="flex flex-col gap-4">
-              {newName.trim() && (
-                <div className="flex justify-center">
-                  <Avatar name={newName} />
-                </div>
-              )}
-              <input
-                autoFocus
-                type="text"
-                placeholder="Member name"
-                value={newName}
-                onChange={e => setNewName(e.target.value)}
-                className="border rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-400"
-              />
-              <button
-                type="submit"
-                disabled={saving || !newName.trim()}
-                className="bg-gray-900 hover:bg-gray-700 text-white rounded-xl py-2.5 font-medium transition-colors disabled:opacity-40"
-              >
-                {saving ? 'Saving...' : 'Add Member'}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      {showAdd && <AddMemberModal onClose={() => setShowAdd(false)} />}
 
       {/* Delete confirm modal */}
       {selectedPerson && (

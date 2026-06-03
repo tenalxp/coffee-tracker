@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import { usePeople } from '../hooks/usePeople'
-import AddDebtModal from './AddDebtModal'
 import AddMemberModal from './AddMemberModal'
+import EditMemberModal from './EditMemberModal'
 import { PixelAvatarIcon } from './PixelAvatar'
 
 const COLORS = [
@@ -107,9 +107,8 @@ export default function MembersView() {
 
       {showAdd && <AddMemberModal onClose={() => setShowAdd(false)} />}
 
-      {/* Delete confirm modal */}
       {selectedPerson && (
-        <AddDebtModal
+        <EditMemberModal
           person={selectedPerson}
           onClose={() => setSelectedPerson(null)}
         />

@@ -38,5 +38,18 @@ export function usePeople() {
     return error
   }
 
-  return { people, loading, addPerson, deletePerson }
+  const updatePerson = async (id, name, icon) => {
+    const trimmed = name.trim()
+    if (!trimmed) return null
+    const { data, error } = await supabase
+      .from('people')
+      .update({ name: trimmed, icon })
+      .eq('id', id)
+      .select()
+      .single()
+    if (!error) setPeople(prev => prev.map(p => p.id === id ? data : p).sort((a, b) => a.name.localeCompare(b.name)))
+    return error
+  }
+
+  return { people, loading, addPerson, deletePerson, updatePerson }
 }

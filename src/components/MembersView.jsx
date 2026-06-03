@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 import { usePeople } from '../hooks/usePeople'
 import AddDebtModal from './AddDebtModal'
+import { PixelAvatarIcon } from './PixelAvatar'
 
 const COLORS = [
   'bg-slate-500', 'bg-zinc-500', 'bg-stone-500', 'bg-neutral-600',
@@ -20,11 +21,26 @@ function getInitials(name) {
   return name.trim().slice(0, 2).toUpperCase()
 }
 
-function Avatar({ name, size = 'lg' }) {
+function Avatar({ name, icon, size = 'lg' }) {
   const color = getColor(name)
-  const sizeClass = size === 'lg' ? 'w-16 h-16 text-xl' : size === 'md' ? 'w-14 h-14 text-base' : 'w-10 h-10 text-sm'
+  const sizeClass = size === 'lg' ? 'w-16 h-16' : size === 'md' ? 'w-14 h-14' : 'w-10 h-10'
+  const textSizeClass = size === 'lg' ? 'text-xl' : size === 'md' ? 'text-base' : 'text-sm'
+  const pixelSize = size === 'lg' ? 52 : size === 'md' ? 44 : 32
+
+  if (icon) {
+    return (
+      <div className={`${sizeClass} rounded-2xl flex items-center justify-center select-none overflow-hidden`}
+        style={{
+          background: 'linear-gradient(135deg, #E8EEF5, #DDE5EE)',
+          boxShadow: '4px 4px 10px rgba(100,120,140,0.18), -2px -2px 6px rgba(255,255,255,0.9)'
+        }}>
+        <PixelAvatarIcon avatarId={icon} size={pixelSize} />
+      </div>
+    )
+  }
+
   return (
-    <div className={`${sizeClass} ${color} rounded-full flex items-center justify-center text-white font-bold shadow-md select-none`}>
+    <div className={`${sizeClass} ${color} rounded-2xl flex items-center justify-center text-white font-bold shadow-md select-none ${textSizeClass}`}>
       {getInitials(name)}
     </div>
   )

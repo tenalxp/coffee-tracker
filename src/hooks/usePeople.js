@@ -10,7 +10,7 @@ export function usePeople() {
       try {
         const { data } = await supabase
           .from('people')
-          .select('id, name')
+          .select('id, name, icon')
           .order('name')
         setPeople(data || [])
       } finally {
@@ -20,12 +20,12 @@ export function usePeople() {
     fetch()
   }, [])
 
-  const addPerson = async (name) => {
+  const addPerson = async (name, icon = 'ghost') => {
     const trimmed = name.trim()
     if (!trimmed) return null
     const { data, error } = await supabase
       .from('people')
-      .insert([{ name: trimmed }])
+      .insert([{ name: trimmed, icon }])
       .select()
       .single()
     if (!error) setPeople(prev => [...prev, data].sort((a, b) => a.name.localeCompare(b.name)))

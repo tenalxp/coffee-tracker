@@ -79,7 +79,7 @@ export default function HomeView() {
             >
               <div className="w-12 h-12 rounded-2xl overflow-hidden"
                 style={{ boxShadow: '4px 4px 8px rgba(100,120,140,0.2), -2px -2px 6px rgba(255,255,255,0.9)' }}>
-                <Avatar name={p.name} size="md" />
+                <Avatar name={p.name} icon={p.icon} size="md" />
               </div>
               <span className="text-[11px] font-medium max-w-[48px] truncate" style={{ color: '#6A7D8E' }}>{p.name}</span>
             </button>

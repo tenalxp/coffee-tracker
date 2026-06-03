@@ -123,10 +123,8 @@ export default function HomeView() {
                   border: '1px solid rgba(255,255,255,0.9)'
                 }}
               >
-                {/* Colored blob accent */}
-                <div className="w-8 h-8 rounded-2xl mb-3 flex items-center justify-center text-xs font-bold text-white"
-                  style={{ background: 'linear-gradient(135deg, #F0A090, #E8807A)' }}>
-                  {p.name.slice(0,2).toUpperCase()}
+                <div className="mb-3">
+                  <Avatar name={p.name} icon={people.find(m => m.name === p.name)?.icon} size="sm" />
                 </div>
                 <p className="font-bold text-sm truncate mb-0.5" style={{ color: '#2D3A48' }}>{p.name}</p>
                 <p className="text-[11px] mb-3" style={{ color: '#8A9BAA' }}>{dayjs(p.latestDate).format('D MMM YYYY')}</p>

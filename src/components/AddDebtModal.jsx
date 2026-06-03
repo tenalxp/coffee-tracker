@@ -60,7 +60,7 @@ export default function AddDebtModal({ person, onClose, onSuccess }) {
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm">
         {/* Header */}
         <div className="flex items-center gap-3 p-5 border-b">
-          <Avatar name={person.name} size="sm" />
+          <Avatar name={person.name} icon={person.icon} size="sm" />
           <div>
             <div className="font-bold text-gray-800">{person.name}</div>
             <div className="text-xs text-gray-400">Add payment record</div>

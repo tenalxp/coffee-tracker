@@ -212,7 +212,7 @@ export default function HistoryView() {
         <div className="mx-5 mt-4 rounded-2xl overflow-hidden"
           style={{ background: 'rgba(255,255,255,0.85)', boxShadow: '0 4px 16px rgba(100,120,140,0.1)', border: '1px solid rgba(255,255,255,0.9)' }}>
           <div className="px-4 py-2 border-b border-gray-50 flex items-center justify-between">
-            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">ยอดรวม · {filteredEntries.length} รายการ</p>
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">Total · {filteredEntries.length} entries</p>
           </div>
           <div className="divide-y divide-gray-50">
             {Object.entries(summary).map(([cur, s]) => (
@@ -298,7 +298,7 @@ export default function HistoryView() {
             <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-3">
               <Trash2 size={20} className="text-red-400" />
             </div>
-            <h3 className="font-bold text-gray-800">ลบรายการนี้?</h3>
+            <h3 className="font-bold text-gray-800">Delete this entry?</h3>
             <p className="text-sm text-gray-400 mt-1">
               {confirmDelete.name} · {confirmDelete.menu || '—'} · {confirmDelete.currency || '฿'}{confirmDelete.price.toLocaleString()}
             </p>
@@ -308,13 +308,13 @@ export default function HistoryView() {
                 onClick={() => setConfirmDelete(null)}
                 className="flex-1 border rounded-xl py-2.5 text-gray-600 hover:bg-gray-50 transition-colors text-sm"
               >
-                ยกเลิก
+                Cancel
               </button>
               <button
                 onClick={() => deleteEntry(confirmDelete.id)}
                 className="flex-1 bg-red-400 hover:bg-red-500 text-white rounded-xl py-2.5 font-medium transition-colors text-sm"
               >
-                ลบเลย
+                Delete
               </button>
             </div>
           </div>

@@ -145,7 +145,7 @@ export default function HistoryView() {
         </div>
 
         {/* Date range */}
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <div className="flex-1">
             <p className="text-[10px] text-gray-400 mb-1 px-1">From</p>
             <input

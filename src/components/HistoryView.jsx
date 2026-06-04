@@ -238,7 +238,7 @@ export default function HistoryView() {
         </div>
       )}
 
-      <div className="px-5 py-4 flex flex-col gap-5">
+      <div className="px-5 py-4 flex flex-col gap-8">
         {loading ? (
           <div className="text-center py-10 text-gray-300 text-sm">Loading...</div>
         ) : entries.length === 0 ? (

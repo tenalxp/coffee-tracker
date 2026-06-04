@@ -9,8 +9,8 @@ const GRAD = 'linear-gradient(135deg, #c8dff5 0%, #d8eaf0 40%, #f5dfc8 100%)'
 const DARK2 = 'transparent'
 
 // shared styles
-const SEC = { padding: '22px 24px', borderBottom: '1px solid rgba(30,40,60,0.08)' }
-const SEC_LAST = { padding: '22px 24px' }
+const SEC = { padding: '0 24px', borderBottom: '1px solid rgba(30,40,60,0.08)', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }
+const SEC_LAST = { padding: '0 24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }
 const LABEL = { fontSize: 9, color: 'rgba(30,40,60,0.45)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }
 const BIG = { fontSize: 28, fontWeight: 800, color: '#1a1f2e', letterSpacing: -0.5 }
 const BIG_RED = { fontSize: 28, fontWeight: 800, color: '#d95c5c', letterSpacing: -0.5 }
@@ -21,7 +21,7 @@ function Header({ label }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <img src={mascot} alt="" style={{ width: 64, height: 64, objectFit: 'contain' }} />
+        <img src={mascot} alt="" style={{ width: 56, height: 56, objectFit: 'contain' }} />
         <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(30,40,60,0.35)', letterSpacing: 0.5, textTransform: 'uppercase' }}>{label}</span>
       </div>
       <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs().format('D MMM YYYY')}</div>
@@ -45,7 +45,7 @@ function MonthlyCardContent({ monthLabel, summary, members, selectedMember, sele
     }}>
       <Header label="Monthly" />
 
-      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column' }}>
 
         {/* S1: Member + month as sub text */}
         <div style={SEC}>
@@ -62,7 +62,7 @@ function MonthlyCardContent({ monthLabel, summary, members, selectedMember, sele
 
         {/* S3: Total */}
         {Object.entries(summary).map(([cur, s]) => (
-          <div key={cur} style={{ ...SEC_LAST, position: 'relative' }}>
+          <div key={cur} style={SEC_LAST}>
             <div style={LABEL}>Total</div>
             <div style={BIG_RED}>{cur}{s.total.toLocaleString()}</div>
             <img src={qr} alt="QR" style={{ position: 'absolute', bottom: 16, right: 20, width: 72, height: 72, borderRadius: 8, opacity: 0.92 }} />
@@ -86,7 +86,7 @@ function EntryCardContent({ entry }) {
     }}>
       <Header label="Daily" />
 
-      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column' }}>
 
         {/* S1: Member + entry date */}
         <div style={SEC}>
@@ -103,7 +103,7 @@ function EntryCardContent({ entry }) {
         </div>
 
         {/* S3: Amount */}
-        <div style={{ ...SEC_LAST, position: 'relative' }}>
+        <div style={SEC_LAST}>
           <div style={LABEL}>Amount</div>
           <div style={BIG_RED}>{entry.currency || '฿'}{entry.price.toLocaleString()}</div>
           <img src={qr} alt="QR" style={{ position: 'absolute', bottom: 16, right: 20, width: 72, height: 72, borderRadius: 8, opacity: 0.92 }} />

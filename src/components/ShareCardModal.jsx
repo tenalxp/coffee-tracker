@@ -11,14 +11,14 @@ const DARK2 = 'transparent'
 const SEC = { padding: '22px 24px', borderBottom: '1px solid rgba(30,40,60,0.08)' }
 const SEC_LAST = { padding: '22px 24px' }
 const LABEL = { fontSize: 9, color: 'rgba(30,40,60,0.45)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }
-const BIG = { fontSize: 36, fontWeight: 800, color: '#1a1f2e', letterSpacing: -1 }
-const BIG_RED = { fontSize: 36, fontWeight: 800, color: '#d95c5c', letterSpacing: -1 }
+const BIG = { fontSize: 28, fontWeight: 800, color: '#1a1f2e', letterSpacing: -0.5 }
+const BIG_RED = { fontSize: 28, fontWeight: 800, color: '#d95c5c', letterSpacing: -0.5 }
 const AVATAR = { width: 28, height: 28, borderRadius: 8, background: 'rgba(106,155,170,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#6A9BAA' }
 const DATE_SUB = { fontSize: 12, color: 'rgba(30,40,60,0.4)', marginTop: 6, fontWeight: 500 }
 
 const HEADER = (
   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-    <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
+    <img src={mascot} alt="" style={{ width: 64, height: 64, objectFit: 'contain' }} />
     <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs().format('D MMM YYYY')}</div>
   </div>
 )

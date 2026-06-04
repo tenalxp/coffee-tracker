@@ -125,12 +125,23 @@ export default function ShareCardModal({ type, data, onClose }) {
       const canvas = await html2canvas(cardRef.current, {
         scale: 4, useCORS: true, backgroundColor: null,
       })
-      const link = document.createElement('a')
-      link.download = type === 'monthly'
+      const filename = type === 'monthly'
         ? `payment-${data.monthLabel.replace(' ', '-')}.jpg`
         : `payment-${data.entry.name}-${data.entry.date}.jpg`
-      link.href = canvas.toDataURL('image/jpeg', 0.95)
-      link.click()
+
+      // iOS: use Web Share API → saves to Photos
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95))
+      const file = new File([blob], filename, { type: 'image/jpeg' })
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file] })
+      } else {
+        // fallback for desktop/Android
+        const link = document.createElement('a')
+        link.download = filename
+        link.href = URL.createObjectURL(blob)
+        link.click()
+        URL.revokeObjectURL(link.href)
+      }
     } finally {
       setDownloading(false)
     }

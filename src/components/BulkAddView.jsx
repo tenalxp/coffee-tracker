@@ -160,18 +160,10 @@ export default function BulkAddView() {
           </div>
         ))}
 
-        {/* Add row button */}
-        <button
-          onClick={addRow}
-          className="flex items-center gap-2 justify-center py-3 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors"
-        >
-          <Plus size={15} />
-          <span className="text-sm">Add row</span>
-        </button>
       </div>
 
       {/* Summary + Save */}
-      <div className="px-5 pb-8">
+      <div className="px-5 pb-3">
         <div className="bg-white rounded-2xl px-5 py-4" style={{ boxShadow: '0 4px 20px rgba(100,120,140,0.12)' }}>
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -209,6 +201,17 @@ export default function BulkAddView() {
             )}
           </button>
         </div>
+      </div>
+
+      {/* Add row button */}
+      <div className="px-5 pb-8">
+        <button
+          onClick={addRow}
+          className="w-full flex items-center gap-2 justify-center py-3 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors"
+        >
+          <Plus size={15} />
+          <span className="text-sm">Add row</span>
+        </button>
       </div>
     </div>
   )

@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import { ChevronLeft, ChevronRight, X, CheckCheck } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X, CheckCheck, ImageDown } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useMonthlyEntries } from '../hooks/useCoffeeEntries'
 import { usePeople } from '../hooks/usePeople'
 import { useItems } from '../hooks/useItems'
 import { Avatar } from './MembersView'
+import ShareCardModal from './ShareCardModal'
 
 const STATUS_CONFIG = {
   pending:   { label: 'Pending', cls: 'bg-red-50 text-red-500' },
@@ -37,6 +38,7 @@ export default function MonthlyView() {
   const clearFilters = () => { setSelectedCurrency(''); setSelectedMember(''); setSelectedItem('') }
   const [markAllSaving, setMarkAllSaving] = useState(false)
   const [showMarkAll, setShowMarkAll] = useState(false)
+  const [showShare, setShowShare] = useState(false)
 
   const handleMarkAll = async (status) => {
     if (!filtered.length) return
@@ -102,7 +104,16 @@ export default function MonthlyView() {
     <div className="min-h-screen">
       {/* Header */}
       <div className="bg-white px-5 pt-14 pb-4 flex flex-col gap-3">
-        <h2 className="text-xl font-bold text-gray-900">Monthly</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-gray-900">Monthly</h2>
+          {filtered.length > 0 && (
+            <button onClick={() => setShowShare(true)}
+              className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 rounded-xl text-xs font-medium text-gray-600 hover:bg-gray-200 transition-colors">
+              <ImageDown size={14} />
+              Save Image
+            </button>
+          )}
+        </div>
 
         {/* Month navigator */}
         <div className="flex items-center justify-between bg-gray-100 rounded-2xl px-2 py-1">
@@ -282,6 +293,22 @@ export default function MonthlyView() {
         )}
       </div>
 
+      {showShare && (
+        <ShareCardModal
+          type="monthly"
+          data={{
+            monthLabel,
+            summary,
+            members: Object.entries(byPerson).map(([name, items]) => ({
+              name,
+              total: items.reduce((s, e) => s + e.price, 0),
+              pending: items.filter(e => e.status === 'pending').reduce((s, e) => s + e.price, 0),
+              currency: items[0]?.currency || '฿',
+            }))
+          }}
+          onClose={() => setShowShare(false)}
+        />
+      )}
     </div>
   )
 }

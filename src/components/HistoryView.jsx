@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
-import { Search, X, Trash2 } from 'lucide-react'
+import { Search, X, Trash2, ImageDown } from 'lucide-react'
+import ShareCardModal from './ShareCardModal'
 import { supabase } from '../lib/supabase'
 import { useItems } from '../hooks/useItems'
 import { usePeople } from '../hooks/usePeople'
@@ -57,6 +58,7 @@ export default function HistoryView() {
   }, [status, selectedMember, selectedItem, dateFrom, dateTo])
 
   const [confirmDelete, setConfirmDelete] = useState(null)
+  const [shareEntry, setShareEntry] = useState(null)
 
   const updateStatus = async (id, s) => {
     await supabase.from('coffee_entries').update({ status: s }).eq('id', id)
@@ -278,6 +280,12 @@ export default function HistoryView() {
                         </select>
                       </div>
                       <button
+                        onClick={() => setShareEntry(entry)}
+                        className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-gray-300 hover:text-blue-400 hover:bg-blue-50 transition-colors"
+                      >
+                        <ImageDown size={13} />
+                      </button>
+                      <button
                         onClick={() => setConfirmDelete(entry)}
                         className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors"
                       >
@@ -291,6 +299,14 @@ export default function HistoryView() {
           ))
         )}
       </div>
+
+      {shareEntry && (
+        <ShareCardModal
+          type="entry"
+          data={{ entry: shareEntry }}
+          onClose={() => setShareEntry(null)}
+        />
+      )}
 
       {confirmDelete && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4"

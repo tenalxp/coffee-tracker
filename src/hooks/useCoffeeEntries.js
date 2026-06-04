@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import dayjs from 'dayjs'
 import { supabase } from '../lib/supabase'
 
 export function useCoffeeEntries(date) {
@@ -84,8 +85,8 @@ export function useMonthlyEntries(year, month) {
   useEffect(() => {
     const fetchMonthly = async () => {
       setLoading(true)
-      const from = `${year}-${String(month).padStart(2, '0')}-01`
-      const to = `${year}-${String(month).padStart(2, '0')}-31`
+      const from = dayjs(`${year}-${String(month).padStart(2, '0')}-01`).startOf('month').format('YYYY-MM-DD')
+      const to = dayjs(`${year}-${String(month).padStart(2, '0')}-01`).endOf('month').format('YYYY-MM-DD')
       const { data } = await supabase
         .from('coffee_entries')
         .select('*')

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import { ChevronLeft, ChevronRight, Trash2, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Trash2, X, CheckCheck } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 import { supabase } from '../lib/supabase'
 import { useMonthlyEntries } from '../hooks/useCoffeeEntries'
 import { usePeople } from '../hooks/usePeople'
@@ -36,6 +37,18 @@ export default function MonthlyView() {
 
   const hasFilters = selectedCurrency || selectedMember || selectedItem
   const clearFilters = () => { setSelectedCurrency(''); setSelectedMember(''); setSelectedItem('') }
+  const [markAllSaving, setMarkAllSaving] = useState(false)
+  const [showMarkAll, setShowMarkAll] = useState(false)
+
+  const handleMarkAll = async (status) => {
+    if (!filtered.length) return
+    setMarkAllSaving(true)
+    setShowMarkAll(false)
+    const ids = filtered.map(e => e.id)
+    await supabase.from('coffee_entries').update({ status }).in('id', ids)
+    setLocalEntries(prev => (prev ?? entries).map(e => ids.includes(e.id) ? { ...e, status } : e))
+    setMarkAllSaving(false)
+  }
 
   const allEntries = localEntries ?? entries
 
@@ -147,10 +160,34 @@ export default function MonthlyView() {
         {filtered.length > 0 && (
           <div className="bg-white rounded-2xl overflow-hidden"
             style={{ boxShadow: '0 4px 16px rgba(100,120,140,0.1)' }}>
-            <div className="px-4 py-2 border-b border-gray-50">
+            <div className="px-4 py-2 border-b border-gray-50 flex items-center justify-between">
               <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
                 {monthLabel} · {filtered.length} entries
               </p>
+              <div className="relative">
+                <button
+                  onClick={() => setShowMarkAll(v => !v)}
+                  disabled={markAllSaving}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-white rounded-xl text-xs font-medium hover:bg-gray-700 transition-colors">
+                  <CheckCheck size={12} />
+                  {markAllSaving ? 'Saving...' : 'Mark all'}
+                </button>
+                {showMarkAll && (
+                  <div className="absolute right-0 top-full mt-1 bg-white rounded-2xl shadow-xl z-20 overflow-hidden"
+                    style={{ boxShadow: '0 8px 30px rgba(100,120,140,0.2)', minWidth: 140 }}>
+                    {[
+                      { key: 'pending', label: 'Pending', cls: 'text-red-500' },
+                      { key: 'paid_qr', label: 'QR Paid', cls: 'text-emerald-600' },
+                      { key: 'paid_cash', label: 'Cash Paid', cls: 'text-blue-600' },
+                    ].map(s => (
+                      <button key={s.key} onClick={() => handleMarkAll(s.key)}
+                        className={`w-full px-4 py-3 text-left text-sm font-medium hover:bg-gray-50 transition-colors ${s.cls}`}>
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             <div className="divide-y divide-gray-50">
               {Object.entries(summary).map(([cur, s]) => (

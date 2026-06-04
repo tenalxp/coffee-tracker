@@ -14,8 +14,7 @@ const SEC = { padding: '22px 24px', borderBottom: '1px solid rgba(30,40,60,0.08)
 const SEC_LAST = { padding: '22px 24px' }
 const LABEL = { fontSize: 9, color: 'rgba(30,40,60,0.45)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }
 const BIG = { fontSize: 36, fontWeight: 800, color: '#1a1f2e', letterSpacing: -1 }
-const CHIP_R = { background: '#fff0ee', borderRadius: 8, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: '#e53935' }
-const CHIP_G = { background: '#edfff5', borderRadius: 8, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: '#2e7d32' }
+const BIG_RED = { fontSize: 36, fontWeight: 800, color: '#e88080', letterSpacing: -1 }
 const AVATAR = { width: 28, height: 28, borderRadius: 8, background: 'rgba(106,155,170,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#6A9BAA' }
 
 // ─── Monthly Card ───────────────────────────────────────────────────────────
@@ -47,11 +46,7 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
         {Object.entries(summary).map(([cur, s]) => (
           <div key={cur} style={SEC}>
             <div style={LABEL}>Total</div>
-            <div style={BIG}>{cur}{s.total.toLocaleString()}</div>
-            <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-              {s.pending > 0 && <div style={CHIP_R}>Pending -{cur}{s.pending.toLocaleString()}</div>}
-              {s.paid > 0 && <div style={CHIP_G}>Paid {cur}{s.paid.toLocaleString()}</div>}
-            </div>
+            <div style={BIG_RED}>{cur}{s.total.toLocaleString()}</div>
           </div>
         ))}
 
@@ -65,7 +60,7 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
                   <div style={AVATAR}>{m.name.slice(0, 2).toUpperCase()}</div>
                   <span style={{ fontSize: 13, fontWeight: 600, color: '#1a1f2e' }}>{m.name}</span>
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: m.pending > 0 ? '#e53935' : '#2e7d32' }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#e88080' }}>
                   {m.currency}{m.total.toLocaleString()}
                 </span>
               </div>
@@ -80,7 +75,6 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
 
 // ─── Entry Card ──────────────────────────────────────────────────────────────
 function EntryCardContent({ entry }) {
-  const isPending = entry.status === 'pending'
   return (
     <div style={{
       width: 400, aspectRatio: '4/5',
@@ -120,12 +114,7 @@ function EntryCardContent({ entry }) {
         {/* Amount */}
         <div style={SEC_LAST}>
           <div style={LABEL}>Amount</div>
-          <div style={BIG}>{entry.currency || '฿'}{entry.price.toLocaleString()}</div>
-          <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-            <div style={isPending ? CHIP_R : CHIP_G}>
-              {isPending ? 'Pending' : entry.status === 'paid_qr' ? 'Paid · QR' : 'Paid · Cash'}
-            </div>
-          </div>
+          <div style={BIG_RED}>{entry.currency || '฿'}{entry.price.toLocaleString()}</div>
         </div>
       </div>
     </div>

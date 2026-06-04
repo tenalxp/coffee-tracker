@@ -61,13 +61,18 @@ function MonthlyCardContent({ monthLabel, summary, members, selectedMember, sele
         </div>
 
         {/* S3: Total */}
-        {Object.entries(summary).map(([cur, s]) => (
-          <div key={cur} style={SEC_LAST}>
-            <div style={LABEL}>Total</div>
-            <div style={BIG_RED}>{cur}{s.total.toLocaleString()}</div>
-            <img src={qr} alt="QR" style={{ position: 'absolute', bottom: 16, right: 20, width: 72, height: 72, borderRadius: 8, opacity: 0.92 }} />
-          </div>
-        ))}
+        {(() => {
+          const entries = Object.entries(summary)
+          return (
+            <div style={SEC_LAST}>
+              <div style={LABEL}>Total</div>
+              {entries.map(([cur, s]) => (
+                <div key={cur} style={BIG_RED}>{cur}{s.total.toLocaleString()}</div>
+              ))}
+              <img src={qr} alt="QR" style={{ position: 'absolute', bottom: 16, right: 20, width: 72, height: 72, borderRadius: 8, opacity: 0.92 }} />
+            </div>
+          )
+        })()}
       </div>
     </div>
   )

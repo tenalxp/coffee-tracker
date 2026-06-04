@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import { Plus, Trash2, CheckCircle2, X } from 'lucide-react'
+import { Plus, Trash2, CheckCircle2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { usePeople } from '../hooks/usePeople'
 import { useItems } from '../hooks/useItems'
@@ -180,15 +180,6 @@ function ByDayMode({ people, items, dirtyRef }) {
 
   const setDirty = (val) => { if (dirtyRef) dirtyRef.current = val }
 
-  // Summary/Calculate state
-  const [sumMembers, setSumMembers] = useState([])
-  const [sumFrom, setSumFrom] = useState('')
-  const [sumTo, setSumTo] = useState('')
-  const [sumResult, setSumResult] = useState(null)
-  const [calculating, setCalculating] = useState(false)
-  const [confirmSaving, setConfirmSaving] = useState(false)
-  const [confirmSaved, setConfirmSaved] = useState(false)
-
   const addRow = () => { setRows(prev => [...prev, newDayRow()]); setDirty(true) }
   const updateRow = (id, field, value) => {
     setRows(prev => prev.map(r => r.id === id ? { ...r, [field]: value } : r))
@@ -213,49 +204,6 @@ function ByDayMode({ people, items, dirtyRef }) {
     setSaved(true)
     setDirty(false)
     setTimeout(() => { setSaved(false); setRows([newDayRow()]) }, 1500)
-  }
-
-  const toggleSumMember = (id) =>
-    setSumMembers(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
-
-  const handleCalculate = async () => {
-    if (!sumFrom || !sumTo || sumMembers.length === 0 || !selectedItem) return
-    setCalculating(true)
-    const names = sumMembers.map(id => people.find(p => p.id === id)?.name).filter(Boolean)
-    const { data } = await supabase
-      .from('coffee_entries')
-      .select('*')
-      .in('name', names)
-      .eq('menu', selectedItem)
-      .eq('currency', currency)
-      .gte('date', sumFrom)
-      .lte('date', sumTo)
-    // group by name
-    const grouped = {}
-    for (const e of data || []) {
-      if (!grouped[e.name]) grouped[e.name] = { total: 0, count: 0, person: people.find(p => p.name === e.name) }
-      grouped[e.name].total += e.price
-      grouped[e.name].count += 1
-    }
-    setSumResult(grouped)
-    setCalculating(false)
-  }
-
-  const handleConfirmSave = async () => {
-    if (!sumResult) return
-    setConfirmSaving(true)
-    const inserts = Object.entries(sumResult).map(([name, s]) => ({
-      name,
-      menu: selectedItem,
-      currency,
-      price: s.total,
-      date: sumTo,
-      status: 'pending',
-    }))
-    await supabase.from('coffee_entries').insert(inserts)
-    setConfirmSaving(false)
-    setConfirmSaved(true)
-    setTimeout(() => { setConfirmSaved(false); setSumResult(null) }, 1500)
   }
 
   return (
@@ -336,102 +284,12 @@ function ByDayMode({ people, items, dirtyRef }) {
           </div>
         ))}
       </div>
-      <div className="px-5 pb-6">
+      <div className="px-5 pb-8">
         <button onClick={addRow}
           className="w-full flex items-center gap-2 justify-center py-3 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors">
           <Plus size={15} /><span className="text-sm">Add member</span>
         </button>
       </div>
-
-      {/* ── Calculate Summary ── */}
-      <div className="px-5 pb-8">
-        <div className="bg-white rounded-2xl px-5 py-4 flex flex-col gap-3" style={{ boxShadow: '0 4px 20px rgba(100,120,140,0.12)' }}>
-          <p className="text-xs font-bold text-gray-700">Calculate Summary</p>
-
-          {/* Select members */}
-          <div>
-            <p className="text-[10px] text-gray-400 mb-2">Select members</p>
-            <div className="flex gap-2 flex-wrap">
-              {people.map(p => (
-                <button key={p.id} onClick={() => toggleSumMember(p.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    sumMembers.includes(p.id) ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'}`}>
-                  <Avatar name={p.name} icon={p.icon} size="xs" />
-                  {p.name.split(' ')[0]}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Date range */}
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <p className="text-[10px] text-gray-400 mb-1">From</p>
-              <input type="date" value={sumFrom} onChange={e => setSumFrom(e.target.value)}
-                className="w-full bg-gray-100 rounded-xl px-3 py-2 text-xs text-gray-700 outline-none" />
-            </div>
-            <div className="flex-1">
-              <p className="text-[10px] text-gray-400 mb-1">To</p>
-              <input type="date" value={sumTo} onChange={e => setSumTo(e.target.value)}
-                className="w-full bg-gray-100 rounded-xl px-3 py-2 text-xs text-gray-700 outline-none" />
-            </div>
-          </div>
-
-          <button onClick={handleCalculate}
-            disabled={!sumFrom || !sumTo || sumMembers.length === 0 || !selectedItem || calculating}
-            className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
-              sumFrom && sumTo && sumMembers.length > 0 && selectedItem
-                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                : 'bg-gray-100 text-gray-300 cursor-not-allowed'}`}>
-            {calculating ? 'Calculating...' : 'Calculate'}
-          </button>
-        </div>
-      </div>
-
-      {/* Result popup */}
-      {sumResult && (
-        <div className="fixed inset-0 bg-black/30 flex items-end justify-center z-50 p-4 pb-8"
-          style={{ backdropFilter: 'blur(8px)' }}>
-          <div className="bg-white rounded-3xl w-full max-w-sm overflow-hidden"
-            style={{ boxShadow: '0 20px 60px rgba(100,120,140,0.3)' }}>
-            <div className="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-50">
-              <div>
-                <p className="font-bold text-gray-900">Summary</p>
-                <p className="text-[10px] text-gray-400">{selectedItem} · {currency} · {sumFrom} → {sumTo}</p>
-              </div>
-              <button onClick={() => setSumResult(null)}
-                className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
-                <X size={14} />
-              </button>
-            </div>
-
-            <div className="divide-y divide-gray-50 max-h-64 overflow-y-auto">
-              {Object.entries(sumResult).length === 0 ? (
-                <p className="text-center text-gray-400 text-sm py-8">No entries found</p>
-              ) : Object.entries(sumResult).map(([name, s]) => (
-                <div key={name} className="flex items-center gap-3 px-5 py-3">
-                  <Avatar name={name} icon={s.person?.icon} size="sm" />
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-gray-800">{name}</p>
-                    <p className="text-[10px] text-gray-400">{s.count} entries</p>
-                  </div>
-                  <p className="text-sm font-bold text-gray-900">{currency}{s.total.toLocaleString()}</p>
-                </div>
-              ))}
-            </div>
-
-            {Object.entries(sumResult).length > 0 && (
-              <div className="px-5 py-4 border-t border-gray-50">
-                <button onClick={handleConfirmSave} disabled={confirmSaving}
-                  className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
-                    confirmSaved ? 'bg-emerald-500 text-white' : 'bg-gray-900 text-white hover:bg-gray-700'}`}>
-                  {confirmSaved ? <><CheckCircle2 size={16} /> Saved to History!</> : confirmSaving ? 'Saving...' : 'Confirm & Save to History'}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </>
   )
 }

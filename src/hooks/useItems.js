@@ -35,5 +35,18 @@ export function useItems() {
     return error
   }
 
-  return { items, loading, addItem, deleteItem }
+  const updateItem = async (id, name) => {
+    const trimmed = name.trim()
+    if (!trimmed) return null
+    const { data, error } = await supabase
+      .from('items')
+      .update({ name: trimmed })
+      .eq('id', id)
+      .select()
+      .single()
+    if (!error) setItems(prev => prev.map(i => i.id === id ? data : i).sort((a, b) => a.name.localeCompare(b.name)))
+    return error
+  }
+
+  return { items, loading, addItem, deleteItem, updateItem }
 }

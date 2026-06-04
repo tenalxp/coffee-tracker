@@ -4,20 +4,17 @@ import { X, Download, Image } from 'lucide-react'
 import dayjs from 'dayjs'
 import mascot from '../assets/mascot.png'
 
-const BG = '#EBEBEB'
-const CARD = '#FFFFFF'
-const TEXT = '#111111'
-const TEXT2 = '#888888'
-const ACCENT = '#111111'
+const GRAD = 'linear-gradient(135deg, #c8dff5 0%, #d8eaf0 40%, #f5dfc8 100%)'
+const DARK = 'rgba(20,25,38,0.82)'
+const DARK2 = 'rgba(20,25,38,0.92)'
 
 // ─── Monthly Card ───────────────────────────────────────────────────────────
 function MonthlyCardContent({ monthLabel, summary, members }) {
   return (
     <div style={{
       width: 400, aspectRatio: '4/5',
-      background: BG,
-      borderRadius: 32,
-      padding: 28,
+      background: GRAD,
+      borderRadius: 32, padding: 28,
       display: 'flex', flexDirection: 'column',
       fontFamily: 'system-ui, -apple-system, sans-serif',
       position: 'relative', overflow: 'hidden',
@@ -25,40 +22,33 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src={mascot} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+          <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
           <div>
-            <div style={{ fontSize: 10, color: TEXT2, letterSpacing: 2, textTransform: 'uppercase' }}>Payment Tracker</div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: TEXT }}>{monthLabel}</div>
+            <div style={{ fontSize: 10, color: 'rgba(30,40,60,0.5)', letterSpacing: 2, textTransform: 'uppercase' }}>Payment Tracker</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#1a1f2e' }}>{monthLabel}</div>
           </div>
         </div>
-        <div style={{ fontSize: 11, color: TEXT2 }}>{dayjs().format('D MMM YYYY')}</div>
+        <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs().format('D MMM YYYY')}</div>
       </div>
 
       {/* Total card */}
       {Object.entries(summary).map(([cur, s]) => (
         <div key={cur} style={{
-          background: CARD, borderRadius: 20, padding: '20px 24px',
-          marginBottom: 12,
-          boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+          background: DARK2, borderRadius: 20, padding: '20px 24px', marginBottom: 12,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
         }}>
-          <div style={{ fontSize: 10, color: TEXT2, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 6 }}>Total</div>
-          <div style={{ fontSize: 34, fontWeight: 800, color: TEXT, letterSpacing: -1 }}>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 6 }}>Total</div>
+          <div style={{ fontSize: 36, fontWeight: 800, color: 'white', letterSpacing: -1 }}>
             {cur}{s.total.toLocaleString()}
           </div>
-          <div style={{ display: 'flex', gap: 16, marginTop: 8 }}>
+          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
             {s.pending > 0 && (
-              <div style={{
-                background: '#fff0f0', borderRadius: 8, padding: '4px 10px',
-                fontSize: 11, fontWeight: 600, color: '#e53935',
-              }}>
+              <div style={{ background: 'rgba(255,138,128,0.18)', borderRadius: 8, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: '#ff8a80' }}>
                 Pending -{cur}{s.pending.toLocaleString()}
               </div>
             )}
             {s.paid > 0 && (
-              <div style={{
-                background: '#f0fff4', borderRadius: 8, padding: '4px 10px',
-                fontSize: 11, fontWeight: 600, color: '#2e7d32',
-              }}>
+              <div style={{ background: 'rgba(105,240,174,0.18)', borderRadius: 8, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: '#69f0ae' }}>
                 Paid {cur}{s.paid.toLocaleString()}
               </div>
             )}
@@ -68,11 +58,10 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
 
       {/* Members card */}
       <div style={{
-        background: CARD, borderRadius: 20, padding: '20px 24px',
-        flex: 1, overflow: 'hidden',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+        background: DARK, borderRadius: 20, padding: '20px 24px', flex: 1, overflow: 'hidden',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
       }}>
-        <div style={{ fontSize: 10, color: TEXT2, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14 }}>
+        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14 }}>
           Members · {members.length} people
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -81,23 +70,21 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: 8,
-                  background: '#f0f0f0',
+                  background: 'rgba(106,155,170,0.25)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 10, fontWeight: 700, color: '#555',
+                  fontSize: 10, fontWeight: 700, color: '#6A9BAA',
                 }}>
                   {m.name.slice(0, 2).toUpperCase()}
                 </div>
-                <span style={{ fontSize: 13, fontWeight: 600, color: TEXT }}>{m.name}</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: 'white' }}>{m.name}</span>
               </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: m.pending > 0 ? '#e53935' : '#2e7d32' }}>
-                  {m.currency}{m.total.toLocaleString()}
-                </div>
-              </div>
+              <span style={{ fontSize: 13, fontWeight: 700, color: m.pending > 0 ? '#ff8a80' : '#69f0ae' }}>
+                {m.currency}{m.total.toLocaleString()}
+              </span>
             </div>
           ))}
           {members.length > 7 && (
-            <div style={{ fontSize: 11, color: TEXT2, textAlign: 'center', marginTop: 2 }}>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', textAlign: 'center', marginTop: 2 }}>
               +{members.length - 7} more
             </div>
           )}
@@ -113,7 +100,7 @@ function EntryCardContent({ entry }) {
   return (
     <div style={{
       width: 400, aspectRatio: '4/5',
-      background: BG,
+      background: GRAD,
       borderRadius: 32, padding: 28,
       display: 'flex', flexDirection: 'column',
       fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -121,63 +108,39 @@ function EntryCardContent({ entry }) {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src={mascot} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+          <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
           <div>
-            <div style={{ fontSize: 10, color: TEXT2, letterSpacing: 2, textTransform: 'uppercase' }}>Payment Tracker</div>
-            <div style={{ fontSize: 12, color: TEXT2, marginTop: 1 }}>{dayjs(entry.date).format('ddd, D MMM YYYY')}</div>
+            <div style={{ fontSize: 10, color: 'rgba(30,40,60,0.5)', letterSpacing: 2, textTransform: 'uppercase' }}>Payment Tracker</div>
+            <div style={{ fontSize: 12, color: 'rgba(30,40,60,0.5)', marginTop: 1 }}>{dayjs(entry.date).format('ddd, D MMM YYYY')}</div>
           </div>
         </div>
       </div>
 
-      {/* Member card */}
-      <div style={{
-        background: CARD, borderRadius: 20, padding: '18px 24px', marginBottom: 12,
-        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-      }}>
-        <div style={{ fontSize: 10, color: TEXT2, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10 }}>Member</div>
+      {/* Member */}
+      <div style={{ background: DARK2, borderRadius: 20, padding: '18px 24px', marginBottom: 12, boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}>
+        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10 }}>Member</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 12,
-            background: '#f0f0f0',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 13, fontWeight: 700, color: '#555',
-          }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(106,155,170,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#6A9BAA' }}>
             {entry.name.slice(0, 2).toUpperCase()}
           </div>
-          <span style={{ fontSize: 20, fontWeight: 800, color: TEXT }}>{entry.name}</span>
+          <span style={{ fontSize: 20, fontWeight: 800, color: 'white' }}>{entry.name}</span>
         </div>
       </div>
 
-      {/* Item card */}
-      <div style={{
-        background: CARD, borderRadius: 20, padding: '18px 24px', marginBottom: 12,
-        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-      }}>
-        <div style={{ fontSize: 10, color: TEXT2, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 6 }}>Item</div>
-        <div style={{ fontSize: 18, fontWeight: 700, color: TEXT }}>{entry.menu || '—'}</div>
-        {entry.description && (
-          <div style={{ fontSize: 12, color: TEXT2, marginTop: 4 }}>{entry.description}</div>
-        )}
+      {/* Item */}
+      <div style={{ background: DARK, borderRadius: 20, padding: '18px 24px', marginBottom: 12, boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}>
+        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 6 }}>Item</div>
+        <div style={{ fontSize: 18, fontWeight: 700, color: 'white' }}>{entry.menu || '—'}</div>
+        {entry.description && <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>{entry.description}</div>}
       </div>
 
-      {/* Amount card */}
-      <div style={{
-        background: CARD, borderRadius: 20, padding: '18px 24px',
-        flex: 1,
-        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
-      }}>
-        <div style={{ fontSize: 10, color: TEXT2, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Amount</div>
-        <div style={{ fontSize: 44, fontWeight: 800, letterSpacing: -2, color: isPending ? '#e53935' : '#2e7d32' }}>
+      {/* Amount */}
+      <div style={{ background: DARK2, borderRadius: 20, padding: '18px 24px', flex: 1, boxShadow: '0 8px 32px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Amount</div>
+        <div style={{ fontSize: 44, fontWeight: 800, letterSpacing: -2, color: isPending ? '#ff8a80' : '#69f0ae' }}>
           {entry.currency || '฿'}{entry.price.toLocaleString()}
         </div>
-        <div style={{
-          display: 'inline-flex', marginTop: 12,
-          padding: '5px 14px', borderRadius: 20,
-          background: isPending ? '#fff0f0' : '#f0fff4',
-          color: isPending ? '#e53935' : '#2e7d32',
-          fontSize: 12, fontWeight: 600, width: 'fit-content',
-        }}>
+        <div style={{ display: 'inline-flex', marginTop: 12, padding: '5px 14px', borderRadius: 20, background: isPending ? 'rgba(255,138,128,0.18)' : 'rgba(105,240,174,0.18)', color: isPending ? '#ff8a80' : '#69f0ae', fontSize: 12, fontWeight: 600, width: 'fit-content' }}>
           {isPending ? 'Pending' : entry.status === 'paid_qr' ? 'Paid · QR' : 'Paid · Cash'}
         </div>
       </div>

@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { Delete } from 'lucide-react'
+import mascot from '../assets/mascot.png'
 
 const STORAGE_KEY = 'app_pin'
 
@@ -88,9 +89,7 @@ export default function PinLock({ onUnlock }) {
 
       {/* Title */}
       <div className="text-center mb-10">
-        <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-          <span className="text-3xl">💰</span>
-        </div>
+        <img src={mascot} alt="mascot" className="w-24 h-24 object-contain mx-auto mb-4" />
         <h1 className="text-xl font-bold text-gray-900">{title}</h1>
         <p className="text-sm text-gray-400 mt-1">{subtitle}</p>
       </div>

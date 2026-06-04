@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Trash2, X } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useMonthlyEntries } from '../hooks/useCoffeeEntries'
 import { usePeople } from '../hooks/usePeople'
+import { useItems } from '../hooks/useItems'
 import { Avatar } from './MembersView'
 
 const STATUS_CONFIG = {
@@ -25,10 +26,16 @@ export default function MonthlyView() {
   const [month, setMonth] = useState(now.month() + 1)
   const { entries, loading, updateStatus } = useMonthlyEntries(year, month)
   const { people } = usePeople()
+  const { items } = useItems()
 
   const [selectedCurrency, setSelectedCurrency] = useState('')
+  const [selectedMember, setSelectedMember] = useState('')
+  const [selectedItem, setSelectedItem] = useState('')
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [localEntries, setLocalEntries] = useState(null)
+
+  const hasFilters = selectedCurrency || selectedMember || selectedItem
+  const clearFilters = () => { setSelectedCurrency(''); setSelectedMember(''); setSelectedItem('') }
 
   const allEntries = localEntries ?? entries
 
@@ -54,9 +61,12 @@ export default function MonthlyView() {
     setConfirmDelete(null)
   }
 
-  const filtered = selectedCurrency
-    ? allEntries.filter(e => (e.currency || '฿') === selectedCurrency)
-    : allEntries
+  const filtered = allEntries.filter(e => {
+    if (selectedCurrency && (e.currency || '฿') !== selectedCurrency) return false
+    if (selectedMember && e.name !== selectedMember) return false
+    if (selectedItem && e.menu !== selectedItem) return false
+    return true
+  })
 
   // Monthly summary
   const summary = filtered.reduce((acc, e) => {
@@ -92,6 +102,32 @@ export default function MonthlyView() {
           <button onClick={nextMonth} className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-white transition-colors">
             <ChevronRight size={18} className="text-gray-500" />
           </button>
+        </div>
+
+        {/* Member + Item filter */}
+        <div className="flex gap-2">
+          <select
+            value={selectedMember}
+            onChange={e => setSelectedMember(e.target.value)}
+            className={`flex-1 px-3 py-2 rounded-xl text-xs font-medium border-0 outline-none ${
+              selectedMember ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'}`}>
+            <option value="">All members</option>
+            {people.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
+          </select>
+          <select
+            value={selectedItem}
+            onChange={e => setSelectedItem(e.target.value)}
+            className={`flex-1 px-3 py-2 rounded-xl text-xs font-medium border-0 outline-none ${
+              selectedItem ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'}`}>
+            <option value="">All items</option>
+            {items.map(it => <option key={it.id} value={it.name}>{it.name}</option>)}
+          </select>
+          {hasFilters && (
+            <button onClick={clearFilters}
+              className="w-9 h-9 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-200 shrink-0">
+              <X size={14} />
+            </button>
+          )}
         </div>
 
         {/* Currency filter */}

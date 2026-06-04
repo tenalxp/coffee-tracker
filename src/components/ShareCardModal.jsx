@@ -32,15 +32,18 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#1a1f2e' }}>{monthLabel}</div>
-          </div>
         </div>
         <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs().format('D MMM YYYY')}</div>
       </div>
 
       {/* Single unified card */}
-      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1 }}>
+      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+
+        {/* Month section */}
+        <div style={SEC}>
+          <div style={LABEL}>Month</div>
+          <div style={BIG}>{monthLabel}</div>
+        </div>
 
         {/* Total section */}
         {Object.entries(summary).map(([cur, s]) => (
@@ -79,19 +82,16 @@ function EntryCardContent({ entry }) {
       fontFamily: 'system-ui, -apple-system, sans-serif',
       position: 'relative', overflow: 'hidden',
     }}>
-      {/* Header — same as Monthly */}
+      {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#1a1f2e' }}>{dayjs(entry.date).format('ddd, D MMM YYYY')}</div>
-          </div>
         </div>
-        <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs().format('D MMM YYYY')}</div>
+        <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs(entry.date).format('D MMM YYYY')}</div>
       </div>
 
-      {/* Single unified transparent section — same as Monthly */}
-      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1 }}>
+      {/* Sections */}
+      <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
         {/* Member */}
         <div style={SEC}>

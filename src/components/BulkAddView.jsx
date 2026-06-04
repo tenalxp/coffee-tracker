@@ -127,54 +127,8 @@ export default function BulkAddView() {
         </div>
       </div>
 
-      {/* Rows */}
-      <div className="px-5 py-4 flex flex-col gap-2">
-        {rows.map((row, idx) => (
-          <div key={row.id} className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3">
-            <span className="text-xs text-gray-300 font-medium w-5 text-center">{idx + 1}</span>
-
-            <input
-              type="date"
-              value={row.date}
-              onChange={e => updateRow(row.id, 'date', e.target.value)}
-              className="flex-1 bg-gray-100 rounded-xl px-3 py-2 text-xs text-gray-700 outline-none"
-            />
-
-            <div className="flex items-center bg-gray-100 rounded-xl px-3 py-2 gap-1 w-28">
-              <span className="text-xs text-gray-400">{currency}</span>
-              <input
-                type="number"
-                placeholder="0"
-                value={row.price}
-                onChange={e => updateRow(row.id, 'price', e.target.value)}
-                className="w-full bg-transparent text-sm font-semibold text-gray-800 outline-none"
-              />
-            </div>
-
-            <button
-              onClick={() => removeRow(row.id)}
-              className="w-7 h-7 rounded-full flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors shrink-0"
-            >
-              <Trash2 size={14} />
-            </button>
-          </div>
-        ))}
-
-      </div>
-
-      {/* Add row button */}
-      <div className="px-5 pb-3">
-        <button
-          onClick={addRow}
-          className="w-full flex items-center gap-2 justify-center py-3 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors"
-        >
-          <Plus size={15} />
-          <span className="text-sm">Add row</span>
-        </button>
-      </div>
-
       {/* Summary + Save */}
-      <div className="px-5 pb-8">
+      <div className="px-5 pt-4 pb-3">
         <div className="bg-white rounded-2xl px-5 py-4" style={{ boxShadow: '0 4px 20px rgba(100,120,140,0.12)' }}>
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -212,6 +166,51 @@ export default function BulkAddView() {
             )}
           </button>
         </div>
+      </div>
+
+      {/* Rows */}
+      <div className="px-5 pb-2 flex flex-col gap-2">
+        {rows.map((row, idx) => (
+          <div key={row.id} className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3">
+            <span className="text-xs text-gray-300 font-medium w-5 text-center">{idx + 1}</span>
+
+            <input
+              type="date"
+              value={row.date}
+              onChange={e => updateRow(row.id, 'date', e.target.value)}
+              className="flex-1 bg-gray-100 rounded-xl px-3 py-2 text-xs text-gray-700 outline-none"
+            />
+
+            <div className="flex items-center bg-gray-100 rounded-xl px-3 py-2 gap-1 w-28">
+              <span className="text-xs text-gray-400">{currency}</span>
+              <input
+                type="number"
+                placeholder="0"
+                value={row.price}
+                onChange={e => updateRow(row.id, 'price', e.target.value)}
+                className="w-full bg-transparent text-sm font-semibold text-gray-800 outline-none"
+              />
+            </div>
+
+            <button
+              onClick={() => removeRow(row.id)}
+              className="w-7 h-7 rounded-full flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors shrink-0"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Add row button */}
+      <div className="px-5 pb-8">
+        <button
+          onClick={addRow}
+          className="w-full flex items-center gap-2 justify-center py-3 rounded-2xl border-2 border-dashed border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors"
+        >
+          <Plus size={15} />
+          <span className="text-sm">Add row</span>
+        </button>
       </div>
     </div>
   )

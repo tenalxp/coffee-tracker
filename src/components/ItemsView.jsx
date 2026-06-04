@@ -61,13 +61,13 @@ export default function ItemsView() {
               <span className="flex-1 font-medium text-gray-700">{item.name}</span>
               <button
                 onClick={() => { setEditItem(item); setEditName(item.name) }}
-                className="text-gray-300 hover:text-blue-400 transition-colors opacity-0 group-hover:opacity-100"
+                className="text-gray-300 hover:text-blue-400 transition-colors"
               >
                 <Pencil size={15} />
               </button>
               <button
                 onClick={() => setConfirmDelete(item)}
-                className="text-gray-300 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                className="text-gray-300 hover:text-red-400 transition-colors"
               >
                 <X size={16} />
               </button>

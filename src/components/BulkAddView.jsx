@@ -27,7 +27,7 @@ const newDayRow = () => ({
 // ────────────────────────────────────────────
 // BY MEMBER MODE
 // ────────────────────────────────────────────
-function ByMemberMode({ people, items }) {
+function ByMemberMode({ people, items, dirtyRef }) {
   const [selectedMember, setSelectedMember] = useState(null)
   const [selectedItem, setSelectedItem] = useState('')
   const [currency, setCurrency] = useState('฿')
@@ -35,9 +35,13 @@ function ByMemberMode({ people, items }) {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
-  const addRow = () => setRows(prev => [...prev, newMemberRow()])
-  const updateRow = (id, field, value) =>
+  const setDirty = (val) => { if (dirtyRef) dirtyRef.current = val }
+
+  const addRow = () => { setRows(prev => [...prev, newMemberRow()]); setDirty(true) }
+  const updateRow = (id, field, value) => {
     setRows(prev => prev.map(r => r.id === id ? { ...r, [field]: value } : r))
+    setDirty(true)
+  }
   const removeRow = (id) =>
     setRows(prev => prev.length > 1 ? prev.filter(r => r.id !== id) : prev)
 
@@ -59,6 +63,7 @@ function ByMemberMode({ people, items }) {
     await supabase.from('coffee_entries').insert(inserts)
     setSaving(false)
     setSaved(true)
+    setDirty(false)
     setTimeout(() => { setSaved(false); setRows([newMemberRow()]) }, 1500)
   }
 
@@ -165,13 +170,15 @@ function ByMemberMode({ people, items }) {
 // ────────────────────────────────────────────
 // BY DAY MODE
 // ────────────────────────────────────────────
-function ByDayMode({ people, items }) {
+function ByDayMode({ people, items, dirtyRef }) {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [selectedItem, setSelectedItem] = useState('')
   const [currency, setCurrency] = useState('฿')
   const [rows, setRows] = useState([newDayRow()])
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+
+  const setDirty = (val) => { if (dirtyRef) dirtyRef.current = val }
 
   // Summary/Calculate state
   const [sumMembers, setSumMembers] = useState([])
@@ -182,9 +189,11 @@ function ByDayMode({ people, items }) {
   const [confirmSaving, setConfirmSaving] = useState(false)
   const [confirmSaved, setConfirmSaved] = useState(false)
 
-  const addRow = () => setRows(prev => [...prev, newDayRow()])
-  const updateRow = (id, field, value) =>
+  const addRow = () => { setRows(prev => [...prev, newDayRow()]); setDirty(true) }
+  const updateRow = (id, field, value) => {
     setRows(prev => prev.map(r => r.id === id ? { ...r, [field]: value } : r))
+    setDirty(true)
+  }
   const removeRow = (id) =>
     setRows(prev => prev.length > 1 ? prev.filter(r => r.id !== id) : prev)
 
@@ -202,6 +211,7 @@ function ByDayMode({ people, items }) {
     await supabase.from('coffee_entries').insert(inserts)
     setSaving(false)
     setSaved(true)
+    setDirty(false)
     setTimeout(() => { setSaved(false); setRows([newDayRow()]) }, 1500)
   }
 
@@ -429,7 +439,7 @@ function ByDayMode({ people, items }) {
 // ────────────────────────────────────────────
 // MAIN
 // ────────────────────────────────────────────
-export default function BulkAddView() {
+export default function BulkAddView({ dirtyRef }) {
   const { people } = usePeople()
   const { items } = useItems()
   const [mode, setMode] = useState('member')
@@ -456,8 +466,8 @@ export default function BulkAddView() {
       </div>
 
       {mode === 'member'
-        ? <ByMemberMode people={people} items={items} />
-        : <ByDayMode people={people} items={items} />
+        ? <ByMemberMode people={people} items={items} dirtyRef={dirtyRef} />
+        : <ByDayMode people={people} items={items} dirtyRef={dirtyRef} />
       }
     </div>
   )

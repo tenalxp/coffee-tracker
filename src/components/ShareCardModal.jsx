@@ -14,7 +14,7 @@ const SEC = { padding: '22px 24px', borderBottom: '1px solid rgba(30,40,60,0.08)
 const SEC_LAST = { padding: '22px 24px' }
 const LABEL = { fontSize: 9, color: 'rgba(30,40,60,0.45)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }
 const BIG = { fontSize: 36, fontWeight: 800, color: '#1a1f2e', letterSpacing: -1 }
-const BIG_RED = { fontSize: 36, fontWeight: 800, color: '#e88080', letterSpacing: -1 }
+const BIG_RED = { fontSize: 36, fontWeight: 800, color: '#d95c5c', letterSpacing: -1 }
 const AVATAR = { width: 28, height: 28, borderRadius: 8, background: 'rgba(106,155,170,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#6A9BAA' }
 
 // ─── Monthly Card ───────────────────────────────────────────────────────────
@@ -52,17 +52,12 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
 
         {/* Members section */}
         <div style={SEC_LAST}>
-          <div style={LABEL}>Members · {members.length} people</div>
+          <div style={LABEL}>Members</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {members.slice(0, 7).map((m, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={AVATAR}>{m.name.slice(0, 2).toUpperCase()}</div>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: '#1a1f2e' }}>{m.name}</span>
-                </div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#e88080' }}>
-                  {m.currency}{m.total.toLocaleString()}
-                </span>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={AVATAR}>{m.name.slice(0, 2).toUpperCase()}</div>
+                <span style={{ fontSize: 13, fontWeight: 600, color: '#1a1f2e' }}>{m.name}</span>
               </div>
             ))}
             {members.length > 7 && <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.35)', textAlign: 'center' }}>+{members.length - 7} more</div>}

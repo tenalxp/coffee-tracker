@@ -5,8 +5,6 @@ import dayjs from 'dayjs'
 import mascot from '../assets/mascot.png'
 
 const GRAD = 'linear-gradient(135deg, #c8dff5 0%, #d8eaf0 40%, #f5dfc8 100%)'
-const CARD = 'transparent'
-const DARK = 'transparent'
 const DARK2 = 'transparent'
 
 // shared styles
@@ -16,6 +14,14 @@ const LABEL = { fontSize: 9, color: 'rgba(30,40,60,0.45)', letterSpacing: 2, tex
 const BIG = { fontSize: 36, fontWeight: 800, color: '#1a1f2e', letterSpacing: -1 }
 const BIG_RED = { fontSize: 36, fontWeight: 800, color: '#d95c5c', letterSpacing: -1 }
 const AVATAR = { width: 28, height: 28, borderRadius: 8, background: 'rgba(106,155,170,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: '#6A9BAA' }
+const DATE_SUB = { fontSize: 12, color: 'rgba(30,40,60,0.4)', marginTop: 6, fontWeight: 500 }
+
+const HEADER = (
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+    <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
+    <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs().format('D MMM YYYY')}</div>
+  </div>
+)
 
 // ─── Monthly Card ───────────────────────────────────────────────────────────
 function MonthlyCardContent({ monthLabel, summary, members }) {
@@ -28,44 +34,37 @@ function MonthlyCardContent({ monthLabel, summary, members }) {
       fontFamily: 'system-ui, -apple-system, sans-serif',
       position: 'relative', overflow: 'hidden',
     }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
-        </div>
-        <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs().format('D MMM YYYY')}</div>
-      </div>
+      {HEADER}
 
-      {/* Single unified card */}
       <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
-        {/* Month section */}
+        {/* S1: Month + date */}
         <div style={SEC}>
           <div style={LABEL}>Month</div>
           <div style={BIG}>{monthLabel}</div>
         </div>
 
-        {/* Total section */}
-        {Object.entries(summary).map(([cur, s]) => (
-          <div key={cur} style={SEC}>
-            <div style={LABEL}>Total</div>
-            <div style={BIG_RED}>{cur}{s.total.toLocaleString()}</div>
-          </div>
-        ))}
-
-        {/* Members section */}
-        <div style={SEC_LAST}>
+        {/* S2: Members */}
+        <div style={SEC}>
           <div style={LABEL}>Members</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {members.slice(0, 7).map((m, i) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {members.slice(0, 6).map((m, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={AVATAR}>{m.name.slice(0, 2).toUpperCase()}</div>
                 <span style={{ fontSize: 13, fontWeight: 600, color: '#1a1f2e' }}>{m.name}</span>
               </div>
             ))}
-            {members.length > 7 && <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.35)', textAlign: 'center' }}>+{members.length - 7} more</div>}
+            {members.length > 6 && <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.35)' }}>+{members.length - 6} more</div>}
           </div>
         </div>
+
+        {/* S3: Total */}
+        {Object.entries(summary).map(([cur, s]) => (
+          <div key={cur} style={SEC_LAST}>
+            <div style={LABEL}>Total</div>
+            <div style={BIG_RED}>{cur}{s.total.toLocaleString()}</div>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -82,31 +81,25 @@ function EntryCardContent({ entry }) {
       fontFamily: 'system-ui, -apple-system, sans-serif',
       position: 'relative', overflow: 'hidden',
     }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src={mascot} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} />
-        </div>
-        <div style={{ fontSize: 11, color: 'rgba(30,40,60,0.4)' }}>{dayjs(entry.date).format('D MMM YYYY')}</div>
-      </div>
+      {HEADER}
 
-      {/* Sections */}
       <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
-        {/* Member */}
+        {/* S1: Member + entry date */}
         <div style={SEC}>
           <div style={LABEL}>Member</div>
           <div style={BIG}>{entry.name}</div>
+          <div style={DATE_SUB}>{dayjs(entry.date).format('ddd, D MMM YYYY')}</div>
         </div>
 
-        {/* Item */}
+        {/* S2: Item */}
         <div style={SEC}>
           <div style={LABEL}>Item</div>
           <div style={BIG}>{entry.menu || '—'}</div>
           {entry.description && <div style={{ fontSize: 12, color: 'rgba(30,40,60,0.4)', marginTop: 4 }}>{entry.description}</div>}
         </div>
 
-        {/* Amount */}
+        {/* S3: Amount */}
         <div style={SEC_LAST}>
           <div style={LABEL}>Amount</div>
           <div style={BIG_RED}>{entry.currency || '฿'}{entry.price.toLocaleString()}</div>

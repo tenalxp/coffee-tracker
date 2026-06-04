@@ -41,13 +41,27 @@ export function usePeople() {
   const updatePerson = async (id, name, icon) => {
     const trimmed = name.trim()
     if (!trimmed) return null
+
+    // get old name first
+    const oldPerson = (await supabase.from('people').select('name').eq('id', id).single()).data
+
     const { data, error } = await supabase
       .from('people')
       .update({ name: trimmed, icon })
       .eq('id', id)
       .select()
       .single()
-    if (!error) setPeople(prev => prev.map(p => p.id === id ? data : p).sort((a, b) => a.name.localeCompare(b.name)))
+
+    if (!error) {
+      setPeople(prev => prev.map(p => p.id === id ? data : p).sort((a, b) => a.name.localeCompare(b.name)))
+      // also update name in all coffee_entries
+      if (oldPerson && oldPerson.name !== trimmed) {
+        await supabase
+          .from('coffee_entries')
+          .update({ name: trimmed })
+          .eq('name', oldPerson.name)
+      }
+    }
     return error
   }
 

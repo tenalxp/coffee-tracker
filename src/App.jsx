@@ -41,7 +41,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col max-w-md mx-auto" style={{ background: 'linear-gradient(160deg, #E8EEF5 0%, #EDF3F0 100%)' }}>
       <div className="flex-1 overflow-y-auto pb-20">
         {tab === 'home'    && <HomeView />}
-        {tab === 'monthly' && <div className="px-5 pt-14 min-h-screen"><h2 className="text-xl font-bold mb-5" style={{ color: '#3D2B3D' }}>Monthly</h2><MonthlyView /></div>}
+        {tab === 'monthly' && <MonthlyView />}
         {tab === 'history' && <HistoryView />}
         {tab === 'members' && <div className="px-5 pt-14 min-h-screen"><MembersView /></div>}
         {tab === 'bulk'    && <BulkAddView dirtyRef={bulkDirtyRef} />}

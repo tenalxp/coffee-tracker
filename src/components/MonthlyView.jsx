@@ -56,7 +56,7 @@ export default function MonthlyView() {
                 <div className="font-bold text-lg">{name}</div>
                 <div className="text-right">
                   <div className="text-xs opacity-60">Pending</div>
-                  <div className="font-bold">฿{pending.toFixed(0)}</div>
+                  <div className="font-bold">฿{pending.toLocaleString()}</div>
                 </div>
               </div>
 
@@ -71,7 +71,7 @@ export default function MonthlyView() {
                       {entry.menu || '-'}
                     </div>
                     <div className="font-medium text-gray-800 text-sm shrink-0">
-                      ฿{entry.price.toFixed(0)}
+                      ฿{entry.price.toLocaleString()}
                     </div>
                     <StatusSelector
                       status={entry.status}
@@ -84,7 +84,7 @@ export default function MonthlyView() {
               {/* Person footer */}
               <div className="bg-gray-50 px-4 py-2 flex justify-between text-sm text-gray-500">
                 <span>{items.length} records</span>
-                <span>Total ฿{total.toFixed(0)}</span>
+                <span>Total ฿{total.toLocaleString()}</span>
               </div>
             </div>
           )

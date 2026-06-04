@@ -19,7 +19,7 @@ export default function EntryCard({ entry, onStatusChange, onDelete }) {
         )}
       </div>
       <div className="text-right shrink-0 flex flex-col items-end gap-1">
-        <div className="font-bold text-gray-800">฿{entry.price.toFixed(0)}</div>
+        <div className="font-bold text-gray-800">฿{entry.price.toLocaleString()}</div>
         <StatusSelector status={entry.status} onChange={s => onStatusChange(entry.id, s)} />
       </div>
       <button

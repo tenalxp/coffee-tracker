@@ -43,15 +43,15 @@ export default function DailyView() {
         <div className="flex gap-3">
           <div className="flex-1 bg-amber-500 text-white rounded-2xl p-3 text-center">
             <div className="text-xs opacity-80">รวมทั้งหมด</div>
-            <div className="font-bold text-lg">฿{total.toFixed(0)}</div>
+            <div className="font-bold text-lg">฿{total.toLocaleString()}</div>
           </div>
           <div className="flex-1 bg-red-400 text-white rounded-2xl p-3 text-center">
             <div className="text-xs opacity-80">ค้างจ่าย</div>
-            <div className="font-bold text-lg">฿{pending.toFixed(0)}</div>
+            <div className="font-bold text-lg">฿{pending.toLocaleString()}</div>
           </div>
           <div className="flex-1 bg-green-400 text-white rounded-2xl p-3 text-center">
             <div className="text-xs opacity-80">จ่ายแล้ว</div>
-            <div className="font-bold text-lg">฿{(total - pending).toFixed(0)}</div>
+            <div className="font-bold text-lg">฿{(total - pending).toLocaleString()}</div>
           </div>
         </div>
       )}

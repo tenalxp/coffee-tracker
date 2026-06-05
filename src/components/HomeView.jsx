@@ -91,6 +91,33 @@ export default function HomeView() {
           </span>
         </div>
 
+        {/* Total pending summary */}
+        {pendingPeople.length > 0 && (() => {
+          const totals = {}
+          pendingPeople.forEach(p => {
+            Object.entries(p.totals).forEach(([cur, amt]) => {
+              totals[cur] = (totals[cur] || 0) + amt
+            })
+          })
+          return (
+            <div className="rounded-2xl px-4 py-3 mb-4 flex items-center justify-between flex-wrap gap-2"
+              style={{
+                background: 'rgba(255,255,255,0.8)',
+                boxShadow: '0 4px 16px rgba(100,120,140,0.1)',
+                border: '1px solid rgba(255,255,255,0.9)'
+              }}>
+              <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: '#8A9BAA' }}>Total Pending</p>
+              <div className="flex gap-3 flex-wrap">
+                {Object.entries(totals).map(([cur, amt]) => (
+                  <p key={cur} className="text-base font-bold" style={{ color: '#E07060' }}>
+                    -{cur}{amt.toLocaleString()}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )
+        })()}
+
         {loading ? (
           <div className="text-center py-10 text-sm" style={{ color: '#8A9BAA' }}>Loading...</div>
         ) : pendingPeople.length === 0 ? (

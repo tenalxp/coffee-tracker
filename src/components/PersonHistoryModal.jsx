@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
-import { X, Plus, Trash2 } from 'lucide-react'
+import { X, Plus, Trash2, ImageDown } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useItems } from '../hooks/useItems'
 import { Avatar } from './MembersView'
 import AddDebtModal from './AddDebtModal'
+import ShareCardModal from './ShareCardModal'
 
 const STATUS_CONFIG = {
   pending:   { label: 'Pending', cls: 'bg-red-50 text-red-500' },
@@ -25,10 +26,12 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
+  const [showShare, setShowShare] = useState(false)
 
   // filters
   const [statusFilter, setStatusFilter] = useState('all')
   const [itemFilter, setItemFilter] = useState('')
+  const [currencyFilter, setCurrencyFilter] = useState('')
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
 
@@ -62,6 +65,7 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
   const filtered = entries.filter(e => {
     if (statusFilter !== 'all' && e.status !== statusFilter) return false
     if (itemFilter && e.menu !== itemFilter) return false
+    if (currencyFilter && (e.currency || '฿') !== currencyFilter) return false
     if (dateFrom && e.date < dateFrom) return false
     if (dateTo && e.date > dateTo) return false
     return true
@@ -75,7 +79,17 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
       return acc
     }, {})
 
-  const hasFilters = statusFilter !== 'all' || itemFilter || dateFrom || dateTo
+  const hasFilters = statusFilter !== 'all' || itemFilter || currencyFilter || dateFrom || dateTo
+
+  // summary for share card
+  const shareSummary = filtered.reduce((acc, e) => {
+    const c = e.currency || '฿'
+    if (!acc[c]) acc[c] = { total: 0, pending: 0, paid: 0 }
+    acc[c].total += e.price
+    if (e.status === 'pending') acc[c].pending += e.price
+    else acc[c].paid += e.price
+    return acc
+  }, {})
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col max-w-md mx-auto" style={{ background: 'linear-gradient(160deg, #E8EEF5 0%, #EDF3F0 100%)' }}>
@@ -92,10 +106,18 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
           <div className="flex items-center gap-2">
             {hasFilters && (
               <button
-                onClick={() => { setStatusFilter('all'); setItemFilter(''); setDateFrom(''); setDateTo('') }}
+                onClick={() => { setStatusFilter('all'); setItemFilter(''); setCurrencyFilter(''); setDateFrom(''); setDateTo('') }}
                 className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded-lg hover:bg-gray-50"
               >
                 Clear
+              </button>
+            )}
+            {filtered.length > 0 && (
+              <button
+                onClick={() => setShowShare(true)}
+                className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
+              >
+                <ImageDown size={15} />
               </button>
             )}
             <button
@@ -147,6 +169,18 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
                 className="w-full bg-gray-100 rounded-xl px-3 py-2 text-xs text-gray-700 outline-none"
               />
             </div>
+          </div>
+
+          {/* Currency pills */}
+          <div className="flex gap-2 overflow-x-auto scrollbar-none">
+            {[{ key: '', label: 'All' }, { key: '฿', label: '฿ THB' }, { key: '₭', label: '₭ KIP' }, { key: '$', label: '$ USD' }].map(c => (
+              <button key={c.key} onClick={() => setCurrencyFilter(c.key)}
+                className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors shrink-0 ${
+                  currencyFilter === c.key ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
+                }`}>
+                {c.label}
+              </button>
+            ))}
           </div>
 
           {/* Item + Status pills */}
@@ -224,6 +258,20 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
           })
         )}
       </div>
+
+      {showShare && (
+        <ShareCardModal
+          type="monthly"
+          data={{
+            monthLabel: person.name,
+            summary: shareSummary,
+            selectedMember: person.name,
+            selectedItem: itemFilter,
+            members: [{ name: person.name, total: Object.values(shareSummary).reduce((s, v) => s + v.total, 0), pending: Object.values(shareSummary).reduce((s, v) => s + v.pending, 0), currency: currencyFilter || '฿' }]
+          }}
+          onClose={() => setShowShare(false)}
+        />
+      )}
 
       {showAdd && (
         <AddDebtModal

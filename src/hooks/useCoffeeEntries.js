@@ -69,7 +69,16 @@ export function usePendingByPerson() {
       const cur = row.currency || '฿'
       map[row.name].totals[cur] = (map[row.name].totals[cur] || 0) + row.price
     }
-    setData(Object.values(map))
+    // sort by largest pending amount — priority: ₭ > ฿ > $ > others
+    const PRIORITY = ['₭', '฿', '$']
+    const getMax = (totals) => {
+      for (const cur of PRIORITY) {
+        if (totals[cur]) return totals[cur]
+      }
+      return Object.values(totals)[0] || 0
+    }
+    const sorted = Object.values(map).sort((a, b) => getMax(b.totals) - getMax(a.totals))
+    setData(sorted)
     setLoading(false)
   }, [])
 

@@ -30,7 +30,7 @@ function Header({ label }) {
 }
 
 // ─── Monthly Card ───────────────────────────────────────────────────────────
-function MonthlyCardContent({ monthLabel, summary, members, selectedMember, selectedItem }) {
+function MonthlyCardContent({ monthLabel, summary, members, selectedMember, selectedItem, dateRange }) {
   const memberLabel = selectedMember || members.map(m => m.name).join(', ') || 'All Members'
   const itemLabel = selectedItem || 'All Items'
 
@@ -47,11 +47,11 @@ function MonthlyCardContent({ monthLabel, summary, members, selectedMember, sele
 
       <div style={{ background: DARK2, borderRadius: 24, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column' }}>
 
-        {/* S1: Member + month as sub text */}
+        {/* S1: Member + month/dateRange as sub text */}
         <div style={SEC}>
           <div style={LABEL}>Member</div>
           <div style={BIG}>{memberLabel}</div>
-          <div style={DATE_SUB}>{monthLabel}</div>
+          <div style={DATE_SUB}>{dateRange || monthLabel}</div>
         </div>
 
         {/* S2: Item */}

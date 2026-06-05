@@ -259,19 +259,28 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
         )}
       </div>
 
-      {showShare && (
-        <ShareCardModal
-          type="monthly"
-          data={{
-            monthLabel: person.name,
-            summary: shareSummary,
-            selectedMember: person.name,
-            selectedItem: itemFilter,
-            members: [{ name: person.name, total: Object.values(shareSummary).reduce((s, v) => s + v.total, 0), pending: Object.values(shareSummary).reduce((s, v) => s + v.pending, 0), currency: currencyFilter || '฿' }]
-          }}
-          onClose={() => setShowShare(false)}
-        />
-      )}
+      {showShare && (() => {
+        const dates = filtered.map(e => e.date).sort()
+        const dateRange = dates.length > 0
+          ? dates[0] === dates[dates.length - 1]
+            ? dayjs(dates[0]).format('D MMM YYYY')
+            : `${dayjs(dates[0]).format('D MMM YYYY')} – ${dayjs(dates[dates.length - 1]).format('D MMM YYYY')}`
+          : ''
+        return (
+          <ShareCardModal
+            type="monthly"
+            data={{
+              monthLabel: person.name,
+              summary: shareSummary,
+              selectedMember: person.name,
+              selectedItem: itemFilter,
+              dateRange,
+              members: [{ name: person.name, total: Object.values(shareSummary).reduce((s, v) => s + v.total, 0), pending: Object.values(shareSummary).reduce((s, v) => s + v.pending, 0), currency: currencyFilter || '฿' }]
+            }}
+            onClose={() => setShowShare(false)}
+          />
+        )
+      })()}
 
       {showAdd && (
         <AddDebtModal

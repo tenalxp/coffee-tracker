@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import dayjs from 'dayjs'
-import { X, Plus, Trash2, ImageDown } from 'lucide-react'
+import { X, Plus, Trash2, ImageDown, CheckCheck } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useItems } from '../hooks/useItems'
 import { Avatar } from './MembersView'
@@ -27,6 +27,8 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
   const [showAdd, setShowAdd] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [showShare, setShowShare] = useState(false)
+  const [showMarkAll, setShowMarkAll] = useState(false)
+  const [markAllSaving, setMarkAllSaving] = useState(false)
 
   // filters
   const [statusFilter, setStatusFilter] = useState('all')
@@ -81,6 +83,17 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
 
   const hasFilters = statusFilter !== 'all' || itemFilter || currencyFilter || dateFrom || dateTo
 
+  const handleMarkAll = async (status) => {
+    if (!filtered.length) return
+    setMarkAllSaving(true)
+    setShowMarkAll(false)
+    const ids = filtered.map(e => e.id)
+    await supabase.from('coffee_entries').update({ status }).in('id', ids)
+    setEntries(prev => prev.map(e => ids.includes(e.id) ? { ...e, status } : e))
+    setMarkAllSaving(false)
+    onUpdate?.()
+  }
+
   // summary for share card
   const shareSummary = filtered.reduce((acc, e) => {
     const c = e.currency || '฿'
@@ -111,6 +124,33 @@ export default function PersonHistoryModal({ person, onClose, onUpdate }) {
               >
                 Clear
               </button>
+            )}
+            {filtered.length > 0 && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowMarkAll(v => !v)}
+                  disabled={markAllSaving}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-white rounded-xl text-xs font-medium hover:bg-gray-700 transition-colors disabled:opacity-50"
+                >
+                  <CheckCheck size={12} />
+                  {markAllSaving ? 'Saving...' : 'Mark all'}
+                </button>
+                {showMarkAll && (
+                  <div className="absolute right-0 top-full mt-1 bg-white rounded-2xl shadow-xl z-20 overflow-hidden"
+                    style={{ boxShadow: '0 8px 30px rgba(100,120,140,0.2)', minWidth: 140 }}>
+                    {[
+                      { key: 'pending', label: 'Pending', cls: 'text-red-500' },
+                      { key: 'paid_qr', label: 'QR Paid', cls: 'text-emerald-600' },
+                      { key: 'paid_cash', label: 'Cash Paid', cls: 'text-blue-600' },
+                    ].map(s => (
+                      <button key={s.key} onClick={() => handleMarkAll(s.key)}
+                        className={`w-full px-4 py-3 text-left text-sm font-medium hover:bg-gray-50 transition-colors ${s.cls}`}>
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
             {filtered.length > 0 && (
               <button
